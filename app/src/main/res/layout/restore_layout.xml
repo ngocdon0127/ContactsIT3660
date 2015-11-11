@@ -1,0 +1,53 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:paddingTop="100dp"
+    >
+
+
+    <Button
+        android:background="@drawable/blue_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnDownloadFromDropbox"
+        android:id="@+id/btnDownloadFromDropbox"
+        style="@style/button_text"
+        android:layout_marginTop="189dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        />
+
+    <Button
+        android:background="@drawable/blue_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnDownloadFromGoogleDrive"
+        android:id="@+id/btnDownloadFromGoogleDrive"
+        style="@style/button_text"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:background="@drawable/blue_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnRestore"
+        android:id="@+id/btnRestore"
+        style="@style/button_text"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:background="@drawable/blue_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnDeleteAllContacts"
+        android:id="@+id/btnDeleteAllContacts"
+        style="@style/button_text"
+        android:layout_marginTop="185dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        />
+</RelativeLayout>

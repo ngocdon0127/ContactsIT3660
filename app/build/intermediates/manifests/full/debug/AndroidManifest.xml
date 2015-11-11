@@ -51,6 +51,10 @@
             android:name="vn.hoasinhvien.contactsit3660.DropboxActivity"
             android:label="DropboxUpload" >
         </activity>
+        <activity
+            android:name="vn.hoasinhvien.contactsit3660.RestoreActivity"
+            android:label="Restore" >
+        </activity>
     </application>
 
 </manifest>

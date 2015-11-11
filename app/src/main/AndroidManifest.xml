@@ -49,6 +49,13 @@
             >
         </activity>
 
+        <activity
+            android:name=".RestoreActivity"
+            android:label="Restore"
+            >
+
+        </activity>
+
     </application>
 
 </manifest>

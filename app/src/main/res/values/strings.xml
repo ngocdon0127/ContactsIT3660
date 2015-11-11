@@ -11,4 +11,8 @@
     <string name="btn_upload">Upload</string>
     <string name="btn_restore">Restore</string>
     <string name="btn_exits">Exit</string>
+    <string name="btnDownloadFromGoogleDrive">Google Drive</string>
+    <string name="btnRestore">Restore</string>
+    <string name="btnDownloadFromDropbox">Dropbox</string>
+    <string name="btnDeleteAllContacts">Delete All Contacts (nhớ backup trước khi ấn)</string>
 </resources>
