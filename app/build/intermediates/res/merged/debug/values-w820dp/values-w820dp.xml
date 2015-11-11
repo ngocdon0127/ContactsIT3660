@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/E:/Android/Demo%20programming/ContactsIT3660/app/src/main/res/values-w820dp/colors.xml -->
+    <eat-comment/>
+    <color name="tv_danhba">#00CCCC</color>
+    <color name="tv_text_danhba">#ffd700</color>
+    <!-- From: file:/E:/Android/Demo%20programming/ContactsIT3660/app/src/main/res/values-w820dp/dimens.xml -->
+    <eat-comment/>
+    <dimen name="activity_horizontal_margin">64dp</dimen>
+</resources>
