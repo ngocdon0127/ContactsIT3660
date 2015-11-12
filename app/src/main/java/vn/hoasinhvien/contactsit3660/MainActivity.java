@@ -57,9 +57,6 @@ public class MainActivity extends TabActivity {
     //    ArrayContact contacts = new ArrayContact();
     ArrayAdapter<Contact> adapter = null;
     Button btnDB, btnObject, btnXML;
-    Handler handler = new Handler();
-    ProgressDialog dialog;
-    private int progress = 0;
 
 
     @Override
@@ -112,51 +109,21 @@ public class MainActivity extends TabActivity {
     }
 
     public void btnRestore(View v){
-
+        Intent intent = new Intent(MainActivity.this, RestoreActivity.class);
+        startActivity(intent);
     }
 
     public void btnExit(View v){
         finish();
     }
 
-    private void addProgressDialog(String s){
-        progress = 0;
-        dialog = new ProgressDialog(MainActivity.this);
-        dialog.setMax(1);
-        dialog.setMessage(s);
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setProgress(progress);
-        dialog.setCancelable(false);
-        dialog.show();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (true){
-                        Thread.sleep(100);
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                dialog.setProgress(progress);
-                            }
-                        });
-                        if (progress == 1)
-                            break;
-                    }
-                    dialog.dismiss();
 
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
 
     private void readContactsFromDB(){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                addProgressDialog("reading...");
+                SharedData.addProgressDialog("reading...", MainActivity.this);
             }
         });
 
@@ -274,63 +241,6 @@ public class MainActivity extends TabActivity {
         sendBroadcast();
     }
 
-    private void readContactsFromFileXML(){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                addProgressDialog("Reading from XML...");
-            }
-        });
-//        contacts.clear();
-        File file = new File(Environment.getExternalStorageDirectory(), "contacts.xml");
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        try {
-            DocumentBuilder builder = dbFactory.newDocumentBuilder();
-            Document doc = builder.parse(file);
-            doc.getDocumentElement().normalize();
-            NodeList list = doc.getElementsByTagName("contact");
-            for (int i = 0; i < list.getLength(); i++) {
-                Node node = list.item(i);
-                String id;
-                String name;
-                ArrayList<String> number = new ArrayList<>();
-                ArrayList<String> email = new ArrayList<>();
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element e = (Element) node;
-                    id = e.getElementsByTagName("id").item(0).getTextContent();
-                    name = e.getElementsByTagName("name").item(0).getTextContent();
-                    NodeList listNumber = e.getElementsByTagName("phone");
-                    for(int j = 0; j < listNumber.getLength(); j++) {
-                        String n = stdNumber(listNumber.item(j).getTextContent());
-                        if (!number.contains(n))
-                            number.add(n);
-                        else
-                            System.out.println("delete " + n);
-                    }
-                    NodeList listEmail = e.getElementsByTagName("email");
-                    for(int j = 0; j < listEmail.getLength(); j++) {
-                        email.add(listEmail.item(j).getTextContent());
-                    }
-                    Contact c = new Contact(id, name, number, email);
-                    if (contacts.contains(c)) {
-                        System.out.println("delete contact: ");
-                        System.out.println(c.toString());
-                    }
-                    else
-                        contacts.add(c);
-                }
-            }
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            sendBroadcast();
-        }
-    }
-
     private void writeContactsToXML(){
         File file = new File(Environment.getExternalStorageDirectory(), "contacts.xml");
         System.out.println(Environment.getExternalStorageDirectory());
@@ -372,54 +282,7 @@ public class MainActivity extends TabActivity {
         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
     }
 
-    private void writeContactsToDB(){
-        readContactsFromFileXML();
-        for (int i = 0; i < contacts.size(); i++) {
-            Contact c = contacts.get(i);
-            ArrayList<ContentProviderOperation> ops = new ArrayList<>();
-            int rawContactInsertIndex = ops.size();
-            ops.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
-                    .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
-                    .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null).build());
-            ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)
-                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                    .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, c.getName()).build());
-            ArrayList<String> number = c.getNumber();
-            for (int j = 0; j < number.size(); j++) {
-                ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                        .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)
-                        .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                        .withValue(ContactsContract.Data.DATA1, number.get(j)) // Can use ContactsContract.CommonDataKinds.Phone.NUMBER too.
-                        .build());
-            }
-            ArrayList<String> email = c.getEmail();
-            for (int j = 0; j < email.size(); j++) {
-                ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                        .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)
-                        .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)
-                        .withValue(ContactsContract.Data.DATA1, email.get(j))
-                        .build());
-            }
-            try {
-                ContentProviderResult[] res = getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            } catch (OperationApplicationException e) {
-                e.printStackTrace();
-            }
-            System.out.println(i);
-        }
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), "Recovery Contacts Successfully.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-    private String stdNumber(String s){
+    public static String stdNumber(String s){
         int count = 0;
         for (int i = 0; i < s.length(); i++) {
             if ((s.charAt(i) < '0' ) || (s.charAt(i) > '9' ))
@@ -437,17 +300,17 @@ public class MainActivity extends TabActivity {
         return String.valueOf(newNumber);
     }
 
-    private void sendBroadcast(){
+    public void sendBroadcast(){
         Intent intent = new Intent(Information.BROADCAST_DONE_READ_DATA);
         sendBroadcast(intent);
-        progress = 1;
+        SharedData.progress = 1;
     }
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Information.BROADCAST_DONE_READ_DATA)) {
-                progress = 1;
+                SharedData.progress = 1;
 //                for (int i = contacts.size() - 1; i > 0 ; i--) {
 //                    for (int j = 0; j < i; j++) {
 //                        Contact c1 = contacts.get(j);

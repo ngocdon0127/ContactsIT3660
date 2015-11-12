@@ -13,9 +13,13 @@ public class Information {
     public static final String DROPBOX_APP_SECRET = "t37tbaopjvzj5ss";
     public static final String DROPBOX_LOCAL_UPLOAD_FILE_NAME = "dropbox.local.upload.file.name";
     public static final String DROPBOX_SERVER_UPLOAD_FILE_NAME = "dropbox.server.upload.file.name";
+    public static final String DROPBOX_SERVER_DOWNLOAD_FILE_NAME = "dropbox.server.download.file.name";
     public static final String ACCOUNT_PREFS_NAME = "ngocdon";
     public static final String ACCESS_TOKEN_NAME = "accesstokenname.dropbox.ngocdon";
     public static final String ACCESS_UID = "accessuid.dropbox.ngocdon";
     public static final String KEY_BROADCAST_UPLOAD_DROPBOX = "key.broadcast.upload.dropbox";
     public static final String BROADCAST_DONE_READ_DATA = "vn.hoasinhvien.contactsit3660.broadcast.done.read.data";
+    public static final String TYPE = "type";
+    public static final int DOWNLOAD = 0;
+    public static final int UPLOAD = 1;
 }

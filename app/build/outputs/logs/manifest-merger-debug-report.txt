@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from E:\Android\Demo programming\ContactsIT3660\app\src\main\AndroidManifest.xml:2:1-54:12
+ADDED from E:\Android\Demo programming\ContactsIT3660\app\src\main\AndroidManifest.xml:2:1-61:12
 	xmlns:android
 		ADDED from E:\Android\Demo programming\ContactsIT3660\app\src\main\AndroidManifest.xml:2:11-69
 	package
@@ -30,7 +30,7 @@ ADDED from E:\Android\Demo programming\ContactsIT3660\app\src\main\AndroidManife
 	android:name
 		ADDED from E:\Android\Demo programming\ContactsIT3660\app\src\main\AndroidManifest.xml:8:22-64
 application
-ADDED from E:\Android\Demo programming\ContactsIT3660\app\src\main\AndroidManifest.xml:11:5-52:19
+ADDED from E:\Android\Demo programming\ContactsIT3660\app\src\main\AndroidManifest.xml:11:5-59:19
 MERGED from [com.android.support:appcompat-v7:22.2.1] E:\Android\Demo programming\ContactsIT3660\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.1\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:22.2.1] E:\Android\Demo programming\ContactsIT3660\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\AndroidManifest.xml:22:5-20
 	android:label
@@ -95,6 +95,12 @@ ADDED from E:\Android\Demo programming\ContactsIT3660\app\src\main\AndroidManife
 		ADDED from E:\Android\Demo programming\ContactsIT3660\app\src\main\AndroidManifest.xml:48:13-42
 	android:name
 		ADDED from E:\Android\Demo programming\ContactsIT3660\app\src\main\AndroidManifest.xml:47:13-44
+activity#vn.hoasinhvien.contactsit3660.RestoreActivity
+ADDED from E:\Android\Demo programming\ContactsIT3660\app\src\main\AndroidManifest.xml:52:9-57:20
+	android:label
+		ADDED from E:\Android\Demo programming\ContactsIT3660\app\src\main\AndroidManifest.xml:54:13-36
+	android:name
+		ADDED from E:\Android\Demo programming\ContactsIT3660\app\src\main\AndroidManifest.xml:53:13-44
 uses-sdk
 INJECTED from E:\Android\Demo programming\ContactsIT3660\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 MERGED from [com.android.support:appcompat-v7:22.2.1] E:\Android\Demo programming\ContactsIT3660\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.1\AndroidManifest.xml:20:5-43

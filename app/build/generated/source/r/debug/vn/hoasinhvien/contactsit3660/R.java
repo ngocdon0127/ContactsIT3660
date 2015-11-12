@@ -1544,18 +1544,21 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f0c003d;
         public static final int action_mode_bar_stub=0x7f0c003c;
         public static final int action_mode_close_button=0x7f0c0025;
-        public static final int action_settings=0x7f0c0069;
+        public static final int action_settings=0x7f0c006c;
         public static final int activity_chooser_view_content=0x7f0c0026;
         public static final int alertTitle=0x7f0c0030;
         public static final int always=0x7f0c0016;
         public static final int beginning=0x7f0c0013;
         public static final int btnBackup=0x7f0c0052;
         public static final int btnContacts=0x7f0c0051;
+        public static final int btnDeleteAllContacts=0x7f0c0067;
+        public static final int btnDownloadFromDropbox=0x7f0c0065;
+        public static final int btnDownloadFromGoogleDrive=0x7f0c0066;
         public static final int btnExit=0x7f0c0055;
         public static final int btnRestore=0x7f0c0053;
         public static final int btnUpload=0x7f0c0054;
-        public static final int btnUploadToDropbox=0x7f0c0066;
-        public static final int btnUploadToGoogleDrive=0x7f0c0067;
+        public static final int btnUploadToDropbox=0x7f0c0069;
+        public static final int btnUploadToGoogleDrive=0x7f0c006a;
         public static final int buttonPanel=0x7f0c0036;
         public static final int cancel_action=0x7f0c0059;
         public static final int checkbox=0x7f0c0038;
@@ -1628,9 +1631,9 @@ containing a value of this type.
         public static final int title=0x7f0c002c;
         public static final int title_template=0x7f0c002f;
         public static final int topPanel=0x7f0c002e;
-        public static final int tvResult=0x7f0c0068;
+        public static final int tvResult=0x7f0c006b;
         public static final int tvText=0x7f0c0050;
-        public static final int txtFileName=0x7f0c0065;
+        public static final int txtFileName=0x7f0c0068;
         public static final int up=0x7f0c0008;
         public static final int useLogo=0x7f0c0012;
         public static final int withText=0x7f0c001a;
@@ -1679,11 +1682,12 @@ containing a value of this type.
         public static final int notification_template_media=0x7f040020;
         public static final int notification_template_part_chronometer=0x7f040021;
         public static final int notification_template_part_time=0x7f040022;
-        public static final int select_dialog_item_material=0x7f040023;
-        public static final int select_dialog_multichoice_material=0x7f040024;
-        public static final int select_dialog_singlechoice_material=0x7f040025;
-        public static final int support_simple_spinner_dropdown_item=0x7f040026;
-        public static final int upload_activity=0x7f040027;
+        public static final int restore_layout=0x7f040023;
+        public static final int select_dialog_item_material=0x7f040024;
+        public static final int select_dialog_multichoice_material=0x7f040025;
+        public static final int select_dialog_singlechoice_material=0x7f040026;
+        public static final int support_simple_spinner_dropdown_item=0x7f040027;
+        public static final int upload_activity=0x7f040028;
     }
     public static final class menu {
         public static final int menu_main=0x7f0d0000;
@@ -1711,16 +1715,20 @@ containing a value of this type.
         public static final int abc_toolbar_collapse_description=0x7f060010;
         public static final int action_settings=0x7f060011;
         public static final int app_name=0x7f060012;
-        public static final int btnUploadToDropbox=0x7f060013;
-        public static final int btnUploadToGoogleDrive=0x7f060014;
-        public static final int btn_back_up=0x7f060015;
-        public static final int btn_contacts=0x7f060016;
-        public static final int btn_exits=0x7f060017;
-        public static final int btn_restore=0x7f060018;
-        public static final int btn_upload=0x7f060019;
-        public static final int hello_world=0x7f06001a;
-        public static final int status_bar_notification_info_overflow=0x7f06001b;
-        public static final int txtFileName=0x7f06001c;
+        public static final int btnDeleteAllContacts=0x7f060013;
+        public static final int btnDownloadFromDropbox=0x7f060014;
+        public static final int btnDownloadFromGoogleDrive=0x7f060015;
+        public static final int btnRestore=0x7f060016;
+        public static final int btnUploadToDropbox=0x7f060017;
+        public static final int btnUploadToGoogleDrive=0x7f060018;
+        public static final int btn_back_up=0x7f060019;
+        public static final int btn_contacts=0x7f06001a;
+        public static final int btn_exits=0x7f06001b;
+        public static final int btn_restore=0x7f06001c;
+        public static final int btn_upload=0x7f06001d;
+        public static final int hello_world=0x7f06001e;
+        public static final int status_bar_notification_info_overflow=0x7f06001f;
+        public static final int txtFileName=0x7f060020;
     }
     public static final class style {
         public static final int AlertDialog_AppCompat=0x7f080073;

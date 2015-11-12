@@ -35,7 +35,8 @@ public class UploadActivity extends Activity {
             public void onClick(View v) {
                 if (getFileName()){
                     Intent intent = new Intent(UploadActivity.this, DropboxActivity.class);
-                    intent.putExtra(Information.DROPBOX_LOCAL_UPLOAD_FILE_NAME, "new.txt");
+                    intent.putExtra(Information.TYPE, Information.UPLOAD);
+                    intent.putExtra(Information.DROPBOX_LOCAL_UPLOAD_FILE_NAME, "contacts.xml");
                     intent.putExtra(Information.DROPBOX_SERVER_UPLOAD_FILE_NAME, uploadFileName);
                     System.out.println("start calling service");
                     startActivityForResult(intent, 1);

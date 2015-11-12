@@ -206,6 +206,10 @@
     <eat-comment/>
     <string name="action_settings">Settings</string>
     <string name="app_name">ContactsIT3660</string>
+    <string name="btnDeleteAllContacts">Delete All Contacts (nhớ backup trước khi ấn)</string>
+    <string name="btnDownloadFromDropbox">Dropbox</string>
+    <string name="btnDownloadFromGoogleDrive">Google Drive</string>
+    <string name="btnRestore">Restore</string>
     <string name="btnUploadToDropbox">Dropbox</string>
     <string name="btnUploadToGoogleDrive">Google Drive</string>
     <string name="btn_back_up">Back up</string>
