@@ -15,4 +15,6 @@
     <string name="btnRestore">Restore</string>
     <string name="btnDownloadFromDropbox">Dropbox</string>
     <string name="btnDeleteAllContacts">Delete All Contacts (nhớ backup trước khi ấn)</string>
+    <string name="rbDropbox">Dropbox</string>
+    <string name="rbGoogleDrive">Google Drive</string>
 </resources>

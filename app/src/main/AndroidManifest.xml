@@ -37,13 +37,6 @@
         </activity>
 
         <activity
-            android:name=".UploadActivity"
-            android:label="Upload"
-            >
-
-        </activity>
-
-        <activity
             android:name=".DropboxActivity"
             android:label="DropboxUpload"
             >

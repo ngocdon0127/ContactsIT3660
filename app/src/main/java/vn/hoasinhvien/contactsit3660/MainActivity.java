@@ -104,15 +104,14 @@ public class MainActivity extends TabActivity {
 
     public void btnBackup(View v){
         writeContactsToXML();
-    }
-
-    public void btnUpload(View v){
-        Intent intent = new Intent(MainActivity.this, UploadActivity.class);
+        Intent intent = new Intent(MainActivity.this, RestoreActivity.class);
+        intent.putExtra(Information.TYPE, Information.UPLOAD);
         startActivity(intent);
     }
 
     public void btnRestore(View v){
         Intent intent = new Intent(MainActivity.this, RestoreActivity.class);
+        intent.putExtra(Information.TYPE, Information.DOWNLOAD);
         startActivity(intent);
     }
 
@@ -244,6 +243,8 @@ public class MainActivity extends TabActivity {
     }
 
     private void writeContactsToXML(){
+        contacts.clear();
+        readContactsFromDB();
         File file = new File(Environment.getExternalStorageDirectory(), "contacts.xml");
         System.out.println(Environment.getExternalStorageDirectory());
         System.out.println(Environment.getExternalStorageDirectory().getAbsolutePath());

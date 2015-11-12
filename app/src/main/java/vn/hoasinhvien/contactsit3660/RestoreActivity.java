@@ -15,6 +15,7 @@ import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
@@ -40,10 +41,12 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 public class RestoreActivity extends Activity {
 
-    Button btnDownloadFromDropbox;
-    Button btnDownloadFromGoogleDrive;
+//    Button btnDownloadFromDropbox;
+//    Button btnDownloadFromGoogleDrive;
     Button btnRestore;
     Button btnDeleteAllContacts;
+    RadioGroup rgCloud;
+    int type;
 
     ArrayList<Contact> contacts = new ArrayList<>();
 
@@ -52,42 +55,67 @@ public class RestoreActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.restore_layout);
 
-        btnDownloadFromDropbox = (Button) findViewById(R.id.btnDownloadFromDropbox);
-        btnDownloadFromGoogleDrive = (Button) findViewById(R.id.btnDownloadFromGoogleDrive);
+        System.out.println("restore created.");
+        type = -1;
+
+//        btnDownloadFromDropbox = (Button) findViewById(R.id.btnDownloadFromDropbox);
+//        btnDownloadFromGoogleDrive = (Button) findViewById(R.id.btnDownloadFromGoogleDrive);
+        rgCloud = (RadioGroup) findViewById(R.id.rgCloud);
+        rgCloud.check(R.id.rbDropbox);
         btnRestore = (Button) findViewById(R.id.btnRestore);
         btnDeleteAllContacts = (Button) findViewById(R.id.btnDeleteAllContacts);
+        type = getIntent().getExtras().getInt(Information.TYPE);
+        if (type == Information.UPLOAD){
+            btnRestore.setText("Upload");
+            btnDeleteAllContacts.setEnabled(false);
+            btnDeleteAllContacts.setVisibility(View.GONE);
+        }
 
-        btnDownloadFromGoogleDrive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        btnDownloadFromGoogleDrive.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
 
-            }
-        });
-
-        btnDownloadFromDropbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RestoreActivity.this, DropboxActivity.class);
-                intent.putExtra(Information.DROPBOX_LOCAL_UPLOAD_FILE_NAME, "d.txt");
-                intent.putExtra(Information.DROPBOX_SERVER_DOWNLOAD_FILE_NAME, "g.txt");
-                intent.putExtra(Information.TYPE, Information.DOWNLOAD);
-                startActivityForResult(intent, 1);
-            }
-        });
+//        btnDownloadFromDropbox.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(RestoreActivity.this, DropboxActivity.class);
+//                intent.putExtra(Information.DROPBOX_LOCAL_UPLOAD_FILE_NAME, "contacts.xml");
+//                intent.putExtra(Information.DROPBOX_SERVER_DOWNLOAD_FILE_NAME, "contacts.xml");
+//                intent.putExtra(Information.TYPE, Information.DOWNLOAD);
+//                startActivityForResult(intent, 1);
+//            }
+//        });
 
         btnRestore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedData.addProgressDialog("Restoring Contacts...", RestoreActivity.this);
-                final Context context = getApplicationContext();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Looper.prepare();
-                        writeContactsToDB();
-                        Toast.makeText(context, "Contacts are restored successfully", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(RestoreActivity.this, DropboxActivity.class);
+                intent.putExtra(Information.DROPBOX_LOCAL_UPLOAD_FILE_NAME, "contacts.xml");
+                intent.putExtra(Information.DROPBOX_SERVER_DOWNLOAD_FILE_NAME, "contacts.xml");
+                intent.putExtra(Information.DROPBOX_SERVER_UPLOAD_FILE_NAME, "contacts.xml");
+                System.out.println("onClick Restore, type = " + type);
+                if (type == Information.DOWNLOAD){
+                    if (rgCloud.getCheckedRadioButtonId() == R.id.rbDropbox) {
+                        intent.putExtra(Information.TYPE, Information.DOWNLOAD);
                     }
-                }).start();
+                    else {
+                        // Reserved for Google Drive
+                        return;
+                    }
+                }
+                else if (type == Information.UPLOAD){
+                    if (rgCloud.getCheckedRadioButtonId() == R.id.rbDropbox) {
+                        intent.putExtra(Information.TYPE, Information.UPLOAD);
+                    }
+                    else {
+                        // Reserved for Google Drive
+                        return;
+                    }
+                }
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -99,25 +127,31 @@ public class RestoreActivity extends Activity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        int check = 1;
                         Looper.prepare();
-                        Cursor c = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts._ID + " ASC");
-                        String lookup_key;
-                        String id;
-                        while (c.moveToNext()){
-                            lookup_key = c.getString(c.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
-                            id = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
-//                    System.out.println("delete whole contact " + id);
-                            int affected = getContentResolver().delete(ContactsContract.Data.CONTENT_URI, ContactsContract.Data.CONTACT_ID + " = ? ", new String[]{id});
-//                    System.out.println(affected + " info in Data");
-                            affected = getContentResolver().delete(ContactsContract.RawContacts.CONTENT_URI, ContactsContract.Contacts._ID + " = ? ", new String[]{id});
-//                    System.out.println(affected + " RawContacts");
-                            affected = getContentResolver().delete(ContactsContract.Contacts.CONTENT_URI, ContactsContract.Contacts._ID + " = ? ", new String[]{id});
-//                    System.out.println(affected + " contact");
-                            Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookup_key);
-//                    System.out.println("lk: " + lookup_key);
-//                    System.out.println("uri: " + uri.toString());
-                            affected = getContentResolver().delete(uri, null, null);
-//                    System.out.println(affected + " contact with lookupkey");
+                        while (check > 0) {
+                            Cursor c = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts._ID + " ASC");
+                            String lookup_key;
+                            String id;
+                            check = c.getCount();
+                            if (check > 0) {
+                                while (c.moveToNext()) {
+                                    lookup_key = c.getString(c.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+                                    id = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
+                                    //                    System.out.println("delete whole contact " + id);
+                                    int affected = getContentResolver().delete(ContactsContract.Data.CONTENT_URI, ContactsContract.Data.CONTACT_ID + " = ? ", new String[]{id});
+                                    //                    System.out.println(affected + " info in Data");
+                                    affected = getContentResolver().delete(ContactsContract.RawContacts.CONTENT_URI, ContactsContract.Contacts._ID + " = ? ", new String[]{id});
+                                    //                    System.out.println(affected + " RawContacts");
+                                    affected = getContentResolver().delete(ContactsContract.Contacts.CONTENT_URI, ContactsContract.Contacts._ID + " = ? ", new String[]{id});
+                                    //                    System.out.println(affected + " contact");
+                                    Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookup_key);
+                                    //                    System.out.println("lk: " + lookup_key);
+                                    //                    System.out.println("uri: " + uri.toString());
+                                    affected = getContentResolver().delete(uri, null, null);
+                                    //                    System.out.println(affected + " contact with lookupkey");
+                                }
+                            }
                         }
                         showToast("Contacts are deleted successfully");
                         sendBroadcast();
@@ -125,6 +159,39 @@ public class RestoreActivity extends Activity {
                 }).start();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1){
+            switch (type){
+                case Information.DOWNLOAD:
+                    if (resultCode == Activity.RESULT_OK){
+                        SharedData.addProgressDialog("Restoring Contacts...", RestoreActivity.this);
+                        final Context context = getApplicationContext();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Looper.prepare();
+                                writeContactsToDB();
+                                Toast.makeText(context, "Contacts are restored successfully", Toast.LENGTH_SHORT).show();
+                            }
+                        }).start();
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "Download hất bại.", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case Information.UPLOAD:
+                    if (resultCode == Activity.RESULT_OK){
+                        Toast.makeText(getApplicationContext(), "Contacts are backed up successfully.", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "Download hất bại.", Toast.LENGTH_SHORT).show();
+                    }
+            }
+        }
     }
 
     public void showToast(String s){

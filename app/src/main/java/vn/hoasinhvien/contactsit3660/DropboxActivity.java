@@ -97,12 +97,7 @@ public class DropboxActivity extends Activity {
                     upload();
                     break;
                 case Information.DOWNLOAD:
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            download();
-                        }
-                    }).start();
+                    download();
                     break;
             }
         }
@@ -132,12 +127,17 @@ public class DropboxActivity extends Activity {
 //            DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/" + downloadFileName, null, fos, null);
                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/contacts.xml", null, fos, null);
                     System.out.println("download xong.");
+                    result = Activity.RESULT_OK;
+//                    Intent intent = new Intent();
+//                    setResult(Activity.RESULT_OK, intent);
                     sendBroadcast();
                     showToast("Download xong.");
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
+                    setResult(Activity.RESULT_CANCELED);
                 } catch (DropboxException e) {
                     e.printStackTrace();
+                    setResult(Activity.RESULT_CANCELED);
                 }
             }
         }).start();
@@ -238,9 +238,7 @@ public class DropboxActivity extends Activity {
 
                     if ((file.isDir) || (!file.isDeleted)){
                         System.out.println("file existed");
-                        result = Activity.RESULT_CANCELED;
-                        sendBroadcast();
-                        return;
+                        mDBApi.delete("/" + uploadFileName);
                     }
                 } catch (DropboxException e) {
                     e.printStackTrace();
@@ -283,12 +281,12 @@ public class DropboxActivity extends Activity {
         }
     };
 
-    public void delete(){
+    public void delete(final String path){
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    DropboxAPI.Entry file = mDBApi.metadata("/Photos", 0, null, false, null);
+                    DropboxAPI.Entry file = mDBApi.metadata(path, 0, null, false, null);
                     if (file.isDir){
                         System.out.println("'dir");
                     }

@@ -8,36 +8,48 @@
     android:paddingRight="10dp"
     >
 
-    <EditText
-        android:id="@+id/txtFileName"
+    <!--<EditText-->
+        <!--android:id="@+id/txtFileName"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:hint="@string/txtFileName"-->
+        <!--android:layout_marginLeft="30dp"-->
+        <!--android:layout_marginRight="30dp"-->
+        <!--/>-->
+
+    <!--<Button-->
+        <!--android:background="@drawable/blue_button"-->
+        <!--style="@style/button_text"-->
+        <!--android:id="@+id/btnUploadToDropbox"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/btnUploadToDropbox"-->
+        <!--/>-->
+        <!--&lt;!&ndash;android:layout_below="@+id/txtFileName"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_alignLeft="@+id/txtFileName"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_alignStart="@+id/txtFileName" &ndash;&gt;-->
+        <!--&lt;!&ndash;/>&ndash;&gt;-->
+
+    <!--<Button-->
+        <!--android:background="@drawable/blue_button"-->
+        <!--style="@style/button_text"-->
+        <!--android:id="@+id/btnUploadToGoogleDrive"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/btnUploadToGoogleDrive"-->
+        <!--android:layout_alignTop="@+id/btnUploadToDropbox"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_marginRight="38dp"-->
+        <!--android:layout_marginEnd="38dp" />-->
+
+    <RadioGroup
+        android:id="@+id/rg"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/txtFileName"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        />
+        >
 
-    <Button
-        android:background="@drawable/blue_button"
-        style="@style/button_text"
-        android:id="@+id/btnUploadToDropbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/btnUploadToDropbox"
-        android:layout_below="@+id/txtFileName"
-        android:layout_alignLeft="@+id/txtFileName"
-        android:layout_alignStart="@+id/txtFileName" />
-
-    <Button
-        android:background="@drawable/blue_button"
-        style="@style/button_text"
-        android:id="@+id/btnUploadToGoogleDrive"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/btnUploadToGoogleDrive"
-        android:layout_above="@+id/tvResult"
-        android:layout_alignRight="@+id/txtFileName"
-        android:layout_alignEnd="@+id/txtFileName" />
+    </RadioGroup>
 
     <TextView
         style="@style/button_text"
