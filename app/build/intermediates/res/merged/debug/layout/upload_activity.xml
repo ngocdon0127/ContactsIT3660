@@ -18,28 +18,34 @@
         />
 
     <Button
+        android:background="@drawable/blue_button"
+        style="@style/button_text"
         android:id="@+id/btnUploadToDropbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btnUploadToDropbox"
         android:layout_below="@+id/txtFileName"
-        />
+        android:layout_alignLeft="@+id/txtFileName"
+        android:layout_alignStart="@+id/txtFileName" />
 
     <Button
+        android:background="@drawable/blue_button"
+        style="@style/button_text"
         android:id="@+id/btnUploadToGoogleDrive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btnUploadToGoogleDrive"
-        android:layout_below="@+id/txtFileName"
-        android:layout_toRightOf="@+id/btnUploadToDropbox"
-        />
+        android:layout_above="@+id/tvResult"
+        android:layout_alignRight="@+id/txtFileName"
+        android:layout_alignEnd="@+id/txtFileName" />
 
     <TextView
+        style="@style/button_text"
         android:id="@+id/tvResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnUploadToDropbox"
-        android:hint="heheh"
+        android:hint=""
         android:textSize="20dp"
         />
 
