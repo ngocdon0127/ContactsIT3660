@@ -68,7 +68,8 @@ public class RestoreActivity extends Activity {
                 Intent intent = new Intent(RestoreActivity.this, DropboxActivity.class);
                 intent.putExtra(Information.DROPBOX_LOCAL_UPLOAD_FILE_NAME, "d.txt");
                 intent.putExtra(Information.DROPBOX_SERVER_DOWNLOAD_FILE_NAME, "g.txt");
-                startActivity(intent);
+                intent.putExtra(Information.TYPE, Information.DOWNLOAD);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -89,18 +90,18 @@ public class RestoreActivity extends Activity {
                 while (c.moveToNext()){
                     lookup_key = c.getString(c.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
                     id = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
-                    System.out.println("delete whole contact " + id);
+//                    System.out.println("delete whole contact " + id);
                     int affected = getContentResolver().delete(ContactsContract.Data.CONTENT_URI, ContactsContract.Data.CONTACT_ID + " = ? ", new String[]{id});
-                    System.out.println(affected + " info in Data");
+//                    System.out.println(affected + " info in Data");
                     affected = getContentResolver().delete(ContactsContract.RawContacts.CONTENT_URI, ContactsContract.Contacts._ID + " = ? ", new String[]{id});
-                    System.out.println(affected + " RawContacts");
+//                    System.out.println(affected + " RawContacts");
                     affected = getContentResolver().delete(ContactsContract.Contacts.CONTENT_URI, ContactsContract.Contacts._ID + " = ? ", new String[]{id});
-                    System.out.println(affected + " contact");
+//                    System.out.println(affected + " contact");
                     Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookup_key);
-                    System.out.println("lk: " + lookup_key);
-                    System.out.println("uri: " + uri.toString());
+//                    System.out.println("lk: " + lookup_key);
+//                    System.out.println("uri: " + uri.toString());
                     affected = getContentResolver().delete(uri, null, null);
-                    System.out.println(affected + " contact with lookupkey");
+//                    System.out.println(affected + " contact with lookupkey");
                 }
                 Toast.makeText(getApplicationContext(), "Contacts are deleted successfully", Toast.LENGTH_SHORT).show();
             }
@@ -206,7 +207,7 @@ public class RestoreActivity extends Activity {
             } catch (OperationApplicationException e) {
                 e.printStackTrace();
             }
-            System.out.println(i);
+//            System.out.println(i);
         }
         runOnUiThread(new Runnable() {
             @Override

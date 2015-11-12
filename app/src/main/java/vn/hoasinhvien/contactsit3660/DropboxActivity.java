@@ -33,6 +33,7 @@ public class DropboxActivity extends Activity {
     String fileName;
     String uploadFileName;
     String downloadFileName;
+    int type;
     private String accessToken;
     private String uid = "";
     private int result = Activity.RESULT_CANCELED;
@@ -45,9 +46,11 @@ public class DropboxActivity extends Activity {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.dropbox_layout);
 
-        fileName = getIntent().getExtras().getString(Information.DROPBOX_LOCAL_UPLOAD_FILE_NAME);
-        uploadFileName = getIntent().getExtras().getString(Information.DROPBOX_SERVER_UPLOAD_FILE_NAME);
-        downloadFileName = getIntent().getExtras().getString(Information.DROPBOX_SERVER_DOWNLOAD_FILE_NAME);
+        Bundle bl = getIntent().getExtras();
+        fileName = bl.getString(Information.DROPBOX_LOCAL_UPLOAD_FILE_NAME);
+        type = bl.getInt(Information.TYPE);
+        uploadFileName = bl.getString(Information.DROPBOX_SERVER_UPLOAD_FILE_NAME);
+        downloadFileName = bl.getString(Information.DROPBOX_SERVER_DOWNLOAD_FILE_NAME);
         System.out.println(fileName + ":" + uploadFileName);
 
         appKeyPair = new AppKeyPair(Information.DROPBOX_APP_KEY, Information.DROPBOX_APP_SECRET);
@@ -88,12 +91,18 @@ public class DropboxActivity extends Activity {
 
         if (session.isLinked()){
 //            btnLogIn.setText("Log Out");
-            if (uploadFileName != null) {
-                upload();
-            }
-//            else if (downloadFileName.length() > 0){
-            else {
-                download();
+            switch (type){
+                case Information.UPLOAD:
+                    upload();
+                    break;
+                case Information.DOWNLOAD:
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            download();
+                        }
+                    }).start();
+                    break;
             }
         }
         else {
@@ -103,15 +112,26 @@ public class DropboxActivity extends Activity {
     }
 
     public void download(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                SharedData.addProgressDialog("Downloading...", DropboxActivity.this);
+            }
+        });
         new Thread(new Runnable() {
             @Override
             public void run() {
-                File file = new File(Environment.getExternalStorageDirectory(), "d.txt");
+                File file = new File(Environment.getExternalStorageDirectory(), "contacts.xml");
+                if (file.exists()){
+                    file.delete();
+                    System.out.println("Xóa file cũ.");
+                }
                 try {
                     FileOutputStream fos = new FileOutputStream(file);
 //            DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/" + downloadFileName, null, fos, null);
-                    DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/g.txt", null, fos, null);
+                    DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/contacts.xml", null, fos, null);
                     System.out.println("download xong.");
+                    sendBroadcast();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (DropboxException e) {
@@ -168,34 +188,35 @@ public class DropboxActivity extends Activity {
 
     public void upload(){
 
-        progress = 0;
-        progressDialog = new ProgressDialog(DropboxActivity.this);
-        progressDialog.setCancelable(false);
-        progressDialog.setMax(1);
-        progressDialog.setMessage("Uploading...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.show();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressDialog.setProgress(progress);
-                        }
-                    });
-                    if (progress == 1)
-                        break;
-                }
-                progressDialog.dismiss();
-            }
-        }).start();
+        SharedData.addProgressDialog("Uploading...", DropboxActivity.this);
+//        progress = 0;
+//        progressDialog = new ProgressDialog(DropboxActivity.this);
+//        progressDialog.setCancelable(false);
+//        progressDialog.setMax(1);
+//        progressDialog.setMessage("Uploading...");
+//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        progressDialog.show();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true) {
+//                    try {
+//                        Thread.sleep(100);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    handler.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            progressDialog.setProgress(progress);
+//                        }
+//                    });
+//                    if (progress == 1)
+//                        break;
+//                }
+//                progressDialog.dismiss();
+//            }
+//        }).start();
 
         new Thread(new Runnable() {
             @Override
