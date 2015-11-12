@@ -29,14 +29,16 @@ public class SharedData {
                 try {
                     while (true){
                         Thread.sleep(100);
+//                        System.out.println(progress);
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 dialog.setProgress(progress);
                             }
                         });
-                        if (progress == 1)
+                        if (progress == 1){
                             break;
+                        }
                     }
                     dialog.dismiss();
 

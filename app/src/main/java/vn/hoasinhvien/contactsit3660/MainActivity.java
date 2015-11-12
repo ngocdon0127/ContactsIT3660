@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
@@ -91,9 +92,11 @@ public class MainActivity extends TabActivity {
     }
 
     public void btnContacts(View v){
+        SharedData.addProgressDialog("Reading...", MainActivity.this);
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Looper.prepare();
                 readContactsFromDB();
             }
         }).start();
@@ -120,12 +123,6 @@ public class MainActivity extends TabActivity {
 
 
     private void readContactsFromDB(){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                SharedData.addProgressDialog("reading...", MainActivity.this);
-            }
-        });
 
         contacts.clear();
         int countdel = 0;
@@ -224,16 +221,21 @@ public class MainActivity extends TabActivity {
                     contacts.add(contact);
             }
             else {
-                System.out.println("delete whole contact " + id);
-                int affected = getContentResolver().delete(ContactsContract.Data.CONTENT_URI, ContactsContract.Data.CONTACT_ID + " = ? ", new String[]{id});
-                System.out.println(affected + " info");
-                affected = getContentResolver().delete(ContactsContract.Contacts.CONTENT_URI, ContactsContract.Contacts._ID + " = ? ", new String[]{id});
-                System.out.println(affected + " contact");
-                Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookup_key);
-                System.out.println("lk: " + lookup_key);
-                System.out.println("uri: " + uri.toString());
-                affected = getContentResolver().delete(uri, null, null);
-                System.out.println(affected + " contact with lookupkey");
+                try{
+                    System.out.println("delete whole contact " + id);
+                    int affected = getContentResolver().delete(ContactsContract.Data.CONTENT_URI, ContactsContract.Data.CONTACT_ID + " = ? ", new String[]{id});
+                    System.out.println(affected + " info");
+                    affected = getContentResolver().delete(ContactsContract.Contacts.CONTENT_URI, ContactsContract.Contacts._ID + " = ? ", new String[]{id});
+                    System.out.println(affected + " contact");
+                    Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookup_key);
+                    System.out.println("lk: " + lookup_key);
+                    System.out.println("uri: " + uri.toString());
+                    affected = getContentResolver().delete(uri, null, null);
+                    System.out.println(affected + " contact with lookupkey");
+                }
+                catch (Exception e){
+
+                }
             }
         }
         c.close();

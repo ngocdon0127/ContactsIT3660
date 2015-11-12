@@ -3,12 +3,14 @@ package vn.hoasinhvien.contactsit3660;
 import android.app.Activity;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
+import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.view.View;
@@ -76,45 +78,60 @@ public class RestoreActivity extends Activity {
         btnRestore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                writeContactsToDB();
-                Toast.makeText(getApplicationContext(), "Contacts are restored successfully", Toast.LENGTH_SHORT).show();
+                SharedData.addProgressDialog("Restoring Contacts...", RestoreActivity.this);
+                final Context context = getApplicationContext();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Looper.prepare();
+                        writeContactsToDB();
+                        Toast.makeText(context, "Contacts are restored successfully", Toast.LENGTH_SHORT).show();
+                    }
+                }).start();
             }
         });
 
         btnDeleteAllContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Cursor c = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts._ID + " ASC");
-                String lookup_key;
-                String id;
-                while (c.moveToNext()){
-                    lookup_key = c.getString(c.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
-                    id = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
+                SharedData.addProgressDialog("Deleting Contacts...", RestoreActivity.this);
+                final Context context = getApplicationContext();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Looper.prepare();
+                        Cursor c = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, ContactsContract.Contacts._ID + " ASC");
+                        String lookup_key;
+                        String id;
+                        while (c.moveToNext()){
+                            lookup_key = c.getString(c.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+                            id = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
 //                    System.out.println("delete whole contact " + id);
-                    int affected = getContentResolver().delete(ContactsContract.Data.CONTENT_URI, ContactsContract.Data.CONTACT_ID + " = ? ", new String[]{id});
+                            int affected = getContentResolver().delete(ContactsContract.Data.CONTENT_URI, ContactsContract.Data.CONTACT_ID + " = ? ", new String[]{id});
 //                    System.out.println(affected + " info in Data");
-                    affected = getContentResolver().delete(ContactsContract.RawContacts.CONTENT_URI, ContactsContract.Contacts._ID + " = ? ", new String[]{id});
+                            affected = getContentResolver().delete(ContactsContract.RawContacts.CONTENT_URI, ContactsContract.Contacts._ID + " = ? ", new String[]{id});
 //                    System.out.println(affected + " RawContacts");
-                    affected = getContentResolver().delete(ContactsContract.Contacts.CONTENT_URI, ContactsContract.Contacts._ID + " = ? ", new String[]{id});
+                            affected = getContentResolver().delete(ContactsContract.Contacts.CONTENT_URI, ContactsContract.Contacts._ID + " = ? ", new String[]{id});
 //                    System.out.println(affected + " contact");
-                    Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookup_key);
+                            Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookup_key);
 //                    System.out.println("lk: " + lookup_key);
 //                    System.out.println("uri: " + uri.toString());
-                    affected = getContentResolver().delete(uri, null, null);
+                            affected = getContentResolver().delete(uri, null, null);
 //                    System.out.println(affected + " contact with lookupkey");
-                }
-                Toast.makeText(getApplicationContext(), "Contacts are deleted successfully", Toast.LENGTH_SHORT).show();
+                        }
+                        showToast("Contacts are deleted successfully");
+                        sendBroadcast();
+                    }
+                }).start();
             }
         });
     }
 
+    public void showToast(String s){
+        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+    }
+
     private void readContactsFromFileXML(){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                SharedData.addProgressDialog("Reading from XML...", RestoreActivity.this);
-            }
-        });
 //        contacts.clear();
         File file = new File(Environment.getExternalStorageDirectory(), "contacts.xml");
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -160,8 +177,6 @@ public class RestoreActivity extends Activity {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            sendBroadcast();
         }
     }
 
@@ -215,6 +230,6 @@ public class RestoreActivity extends Activity {
                 Toast.makeText(getApplicationContext(), "Recovery Contacts Successfully.", Toast.LENGTH_SHORT).show();
             }
         });
-
+        sendBroadcast();
     }
 }

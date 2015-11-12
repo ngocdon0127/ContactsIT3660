@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.PersistableBundle;
+import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
@@ -132,6 +133,7 @@ public class DropboxActivity extends Activity {
                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/contacts.xml", null, fos, null);
                     System.out.println("download xong.");
                     sendBroadcast();
+                    showToast("Download xong.");
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (DropboxException e) {
@@ -139,6 +141,15 @@ public class DropboxActivity extends Activity {
                 }
             }
         }).start();
+    }
+
+    public void showToast(final String s){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private AndroidAuthSession buildSession() {
