@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.dropbox.client2.DropboxAPI;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -22,6 +24,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -61,7 +65,10 @@ public class RestoreActivity extends Activity {
         btnDownloadFromDropbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(RestoreActivity.this, DropboxActivity.class);
+                intent.putExtra(Information.DROPBOX_LOCAL_UPLOAD_FILE_NAME, "d.txt");
+                intent.putExtra(Information.DROPBOX_SERVER_DOWNLOAD_FILE_NAME, "g.txt");
+                startActivity(intent);
             }
         });
 

@@ -13,6 +13,7 @@ public class Information {
     public static final String DROPBOX_APP_SECRET = "t37tbaopjvzj5ss";
     public static final String DROPBOX_LOCAL_UPLOAD_FILE_NAME = "dropbox.local.upload.file.name";
     public static final String DROPBOX_SERVER_UPLOAD_FILE_NAME = "dropbox.server.upload.file.name";
+    public static final String DROPBOX_SERVER_DOWNLOAD_FILE_NAME = "dropbox.server.download.file.name";
     public static final String ACCOUNT_PREFS_NAME = "ngocdon";
     public static final String ACCESS_TOKEN_NAME = "accesstokenname.dropbox.ngocdon";
     public static final String ACCESS_UID = "accessuid.dropbox.ngocdon";

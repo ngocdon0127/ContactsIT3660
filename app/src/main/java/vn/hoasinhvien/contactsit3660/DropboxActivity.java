@@ -20,6 +20,7 @@ import com.dropbox.client2.session.AppKeyPair;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 /**
  * Created by NgocDon on 11/9/2015.
@@ -31,6 +32,7 @@ public class DropboxActivity extends Activity {
     private DropboxAPI<AndroidAuthSession> mDBApi;
     String fileName;
     String uploadFileName;
+    String downloadFileName;
     private String accessToken;
     private String uid = "";
     private int result = Activity.RESULT_CANCELED;
@@ -45,6 +47,7 @@ public class DropboxActivity extends Activity {
 
         fileName = getIntent().getExtras().getString(Information.DROPBOX_LOCAL_UPLOAD_FILE_NAME);
         uploadFileName = getIntent().getExtras().getString(Information.DROPBOX_SERVER_UPLOAD_FILE_NAME);
+        downloadFileName = getIntent().getExtras().getString(Information.DROPBOX_SERVER_DOWNLOAD_FILE_NAME);
         System.out.println(fileName + ":" + uploadFileName);
 
         appKeyPair = new AppKeyPair(Information.DROPBOX_APP_KEY, Information.DROPBOX_APP_SECRET);
@@ -85,12 +88,37 @@ public class DropboxActivity extends Activity {
 
         if (session.isLinked()){
 //            btnLogIn.setText("Log Out");
-            upload();
+            if (uploadFileName != null) {
+                upload();
+            }
+//            else if (downloadFileName.length() > 0){
+            else {
+                download();
+            }
         }
         else {
 //            btnLogIn.setText("Log In");
             logIn();
         }
+    }
+
+    public void download(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                File file = new File(Environment.getExternalStorageDirectory(), "d.txt");
+                try {
+                    FileOutputStream fos = new FileOutputStream(file);
+//            DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/" + downloadFileName, null, fos, null);
+                    DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/g.txt", null, fos, null);
+                    System.out.println("download xong.");
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (DropboxException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private AndroidAuthSession buildSession() {
