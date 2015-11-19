@@ -49,6 +49,13 @@
 
         </activity>
 
+        <activity
+            android:name=".ViewContactActivity"
+            android:label="View Contact"
+            >
+
+        </activity>
+
     </application>
 
 </manifest>

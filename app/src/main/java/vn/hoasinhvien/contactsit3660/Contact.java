@@ -56,6 +56,24 @@ public class Contact implements Serializable{
 
     @Override
     public String toString() {
+//        String s = "id: " + this.getId() +  "\nname: " + this.getName();
+//        if (this.getNumber() != null) {
+//            s += "\nPhone: " + this.getNumber().size();
+//            for (int i = 0; i < this.getNumber().size(); i++) {
+//                s += "\n" + this.getNumber().get(i);
+//            }
+//        }
+//        if (this.getEmail() != null) {
+//            s += "\nEmail: " + this.getEmail().size();
+//            for (int i = 0; i < this.getEmail().size(); i++) {
+//                s += "\n" + this.getEmail().get(i);
+//            }
+//        }
+//        s += "\n";
+        String s = this.getName();
+        return s;
+    }
+    public String getFullDetails() {
         String s = "id: " + this.getId() +  "\nname: " + this.getName();
         if (this.getNumber() != null) {
             s += "\nPhone: " + this.getNumber().size();
@@ -72,6 +90,7 @@ public class Contact implements Serializable{
         s += "\n";
         return s;
     }
+
 
     public boolean equals(Object oc){
         if (oc instanceof Contact) {
