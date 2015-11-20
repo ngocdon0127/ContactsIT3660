@@ -45,12 +45,8 @@
             android:name=".RestoreActivity"
             android:label="Restore" >
         </activity>
-        <activity
-            android:name=".DisplayContacts"
-            android:label="@string/title_activity_display_contacts"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
-<<<<<<< HEAD
+
+        <<<<<<< HEAD
 =======
 
         <activity
