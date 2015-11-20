@@ -17,4 +17,5 @@
     <string name="btnDeleteAllContacts">Delete All Contacts (nhớ backup trước khi ấn)</string>
     <string name="rbDropbox">Dropbox</string>
     <string name="rbGoogleDrive">Google Drive</string>
+    <string name="title_activity_display_contacts">DisplayContacts</string>
 </resources>
