@@ -49,4 +49,22 @@ public class SharedData {
         }).start();
     }
 
+    public static String stdNumber(String s){
+        int count = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if ((s.charAt(i) < '0' ) || (s.charAt(i) > '9' ))
+                continue;
+            count++;
+        }
+        char[] newNumber = new char[count];
+        int index = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if ((s.charAt(i) < '0' ) || (s.charAt(i) > '9' ))
+                continue;
+            newNumber[index] = s.charAt(i);
+            index++;
+        }
+        return String.valueOf(newNumber);
+    }
+
 }

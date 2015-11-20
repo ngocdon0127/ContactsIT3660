@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -311,7 +312,7 @@ public class MainActivity extends TabActivity {
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, Intent intent) {
             if (intent.getAction().equals(Information.BROADCAST_DONE_READ_DATA)) {
                 SharedData.progress = 1;
 //                for (int i = contacts.size() - 1; i > 0 ; i--) {
@@ -331,6 +332,18 @@ public class MainActivity extends TabActivity {
 //                }
                 adapter = new ArrayAdapter<Contact>(getApplicationContext(), android.R.layout.simple_list_item_1, contacts);
                 lvContact.setAdapter(adapter);
+                lvContact.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        System.out.println(position);
+//                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("content://contacts/people/" + contacts.get(position).getId()));
+                        System.out.println(contacts.get(position).getId());
+                        Intent intent = new Intent(MainActivity.this, ViewContactActivity.class);
+                        intent.putExtra("id", contacts.get(position).getId());
+                        intent.putExtra("name", contacts.get(position).getName());
+                        startActivity(intent);
+                    }
+                });
                 getTabHost().setCurrentTab(1);
             }
         }
