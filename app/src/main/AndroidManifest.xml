@@ -46,9 +46,6 @@
             android:label="Restore" >
         </activity>
 
-        <<<<<<< HEAD
-=======
-
         <activity
             android:name=".ViewContactActivity"
             android:label="View Contact"
@@ -56,7 +53,6 @@
 
         </activity>
 
->>>>>>> c24712b90e18323197a0de548d5d7d677a66fa17
     </application>
 
 </manifest>

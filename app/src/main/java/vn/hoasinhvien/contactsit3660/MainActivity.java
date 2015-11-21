@@ -339,8 +339,7 @@ public class MainActivity extends TabActivity {
 //                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("content://contacts/people/" + contacts.get(position).getId()));
                         System.out.println(contacts.get(position).getId());
                         Intent intent = new Intent(MainActivity.this, ViewContactActivity.class);
-                        intent.putExtra("id", contacts.get(position).getId());
-                        intent.putExtra("name", contacts.get(position).getName());
+                        intent.putExtra("contact", contacts.get(position));
                         startActivity(intent);
                     }
                 });
