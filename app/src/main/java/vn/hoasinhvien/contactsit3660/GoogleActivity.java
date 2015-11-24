@@ -134,9 +134,11 @@ public class GoogleActivity extends Activity{
                                         .execute();
                                 InputStream iStream = resp.getContent();
                                 try{
-                                    final java.io.File file = new java.io.File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath(),
+//                                    final java.io.File file = new java.io.File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath(),
+                                    final java.io.File file = new java.io.File(Environment.getExternalStorageDirectory(),
                                             tmp.getTitle());
-                                    showToast("Downloading: " + tmp.getTitle() + " to " + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath());
+//                                    showToast("Downloading: " + tmp.getTitle() + " to " + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath());
+                                    showToast("Downloading: " + tmp.getTitle() + " to " + Environment.getExternalStorageDirectory());
                                     storeFile(file, iStream);
                                 } finally {
                                     iStream.close();
@@ -234,7 +236,8 @@ public class GoogleActivity extends Activity{
                 try{
                     // Create URI from real path
                     String path;
-                    path = Environment.getExternalStorageDirectory()+ "/Download/Contacts.vcf";
+//                    path = Environment.getExternalStorageDirectory()+ "/Download/Contacts.vcf";
+                    path = Environment.getExternalStorageDirectory()+ "/Contacts.xml";
                     mFileUri = Uri.fromFile(new java.io.File(path));
 
                     ContentResolver cR = GoogleActivity.this.getContentResolver();
@@ -243,7 +246,7 @@ public class GoogleActivity extends Activity{
                     java.io.File fileContent = new java.io.File(mFileUri.getPath());
                     FileContent mediaContent = new FileContent(cR.getType(mFileUri), fileContent);
 
-                    showToast("Selected " + mFileUri.getPath() + "to upload");
+                    showToast("Selected " + mFileUri.getPath() + " to upload. Hehe");
 
                     // File's meta data.
                     File body = new File();
