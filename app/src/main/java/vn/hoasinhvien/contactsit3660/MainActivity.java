@@ -92,6 +92,12 @@ public class MainActivity extends TabActivity {
         unregisterReceiver(receiver);
     }
 
+    public void btnUpload(View v){
+        Intent intent = new Intent(MainActivity.this,GoogleActivity.class);
+        startActivity(intent);
+    }
+
+
     public void btnContacts(View v){
         SharedData.addProgressDialog("Reading...", MainActivity.this);
         new Thread(new Runnable() {

@@ -92,7 +92,13 @@ public class RestoreActivity extends Activity {
         btnRestore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RestoreActivity.this, DropboxActivity.class);
+                Intent intent;
+                if (rgCloud.getCheckedRadioButtonId() == R.id.rbGoogleDrive){
+                    intent = new Intent(RestoreActivity.this, GoogleActivity.class);
+                }
+                else {
+                    intent = new Intent(RestoreActivity.this, DropboxActivity.class);
+                }
                 intent.putExtra(Information.DROPBOX_LOCAL_UPLOAD_FILE_NAME, "contacts.xml");
                 intent.putExtra(Information.DROPBOX_SERVER_DOWNLOAD_FILE_NAME, "contacts.xml");
                 intent.putExtra(Information.DROPBOX_SERVER_UPLOAD_FILE_NAME, "contacts.xml");
@@ -102,8 +108,9 @@ public class RestoreActivity extends Activity {
                         intent.putExtra(Information.TYPE, Information.DOWNLOAD);
                     }
                     else {
-                        // Reserved for Google Drive
-                        return;
+                        if (rgCloud.getCheckedRadioButtonId() == R.id.rbGoogleDrive) {
+                            intent.putExtra(Information.TYPE, Information.DOWNLOAD);
+                        }
                     }
                 }
                 else if (type == Information.UPLOAD){
@@ -111,8 +118,9 @@ public class RestoreActivity extends Activity {
                         intent.putExtra(Information.TYPE, Information.UPLOAD);
                     }
                     else {
-                        // Reserved for Google Drive
-                        return;
+                        if (rgCloud.getCheckedRadioButtonId() == R.id.rbGoogleDrive) {
+                            intent.putExtra(Information.TYPE, Information.DOWNLOAD);
+                        }
                     }
                 }
                 startActivityForResult(intent, 1);

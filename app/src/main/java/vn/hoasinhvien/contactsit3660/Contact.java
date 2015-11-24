@@ -74,7 +74,7 @@ public class Contact implements Serializable{
         return s;
     }
     public String getFullDetails() {
-        String s = "id: " + this.getId() +  "\nname: " + this.getName();
+        String s = "ID: " + this.getId() +  "\nName: " + this.getName();
         if (this.getNumber() != null) {
             s += "\nPhone: " + this.getNumber().size();
             for (int i = 0; i < this.getNumber().size(); i++) {

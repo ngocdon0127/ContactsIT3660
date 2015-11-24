@@ -61,16 +61,16 @@
                 android:onClick="btnRestore"
                 />
 
-            <!--<Button-->
-                <!--style="@style/button_text"-->
-                <!--android:background="@drawable/blue_button"-->
-                <!--android:layout_width="200dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/btn_upload"-->
-                <!--android:id="@+id/btnUpload"-->
-                <!--android:layout_gravity="center_horizontal"-->
-                <!--android:onClick="btnUpload"-->
-                <!--/>-->
+            <Button
+                style="@style/button_text"
+                android:background="@drawable/blue_button"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_upload"
+                android:id="@+id/btnUpload"
+                android:layout_gravity="center_horizontal"
+                android:onClick="btnUpload"
+                />
 
             <Button
                 style="@style/button_text"
