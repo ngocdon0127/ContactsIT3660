@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
@@ -48,10 +49,14 @@ public class GoogleActivity extends Activity{
     private String 					mDLVal;
     private ArrayAdapter 			mAdapter;
 
+    int type;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
+        type = getIntent().getExtras().getInt(Information.TYPE);
+        System.out.println("type = " + type);
 
         // Connect to Google Drive
         try {
@@ -75,19 +80,19 @@ public class GoogleActivity extends Activity{
 
         mListView.setOnItemClickListener(mMessageClickedHandler);
 
-        final Button button = (Button) findViewById(R.id.btnUploadToGoogleDrive);
-        button.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                saveFileToDrive();
-            }
-        });
+//        final Button button = (Button) findViewById(R.id.btnUploadToGoogleDrive);
+//        button.setOnClickListener(new View.OnClickListener(){
+//            public void onClick(View v){
+//                saveFileToDrive();
+//            }
+//        });
 
-        final Button button2 = (Button) findViewById(R.id.btnDownload);
-        button2.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                getDriveContents();
-            }
-        });
+//        final Button button2 = (Button) findViewById(R.id.btnDownload);
+//        button2.setOnClickListener(new View.OnClickListener(){
+//            public void onClick(View v){
+//                getDriveContents();
+//            }
+//        });
     }
 
     private void getDriveContents(){
@@ -184,6 +189,8 @@ public class GoogleActivity extends Activity{
                         oStream.write(buffer, 0, read);
                     }
                     oStream.flush();
+                    setResult(Activity.RESULT_OK);
+                    finish();
                 } finally {
                     oStream.close();
                 }
@@ -206,6 +213,12 @@ public class GoogleActivity extends Activity{
                         mCredential.setSelectedAccountName(accountName);
                         mService = getDriveService(mCredential);
                     }
+                }
+                if (type == Information.UPLOAD){
+                    saveFileToDrive();
+                }
+                else if (type == Information.DOWNLOAD){
+                    getDriveContents();
                 }
                 break;
             case REQUEST_AUTHORIZATION:
@@ -246,7 +259,7 @@ public class GoogleActivity extends Activity{
                     java.io.File fileContent = new java.io.File(mFileUri.getPath());
                     FileContent mediaContent = new FileContent(cR.getType(mFileUri), fileContent);
 
-                    showToast("Selected " + mFileUri.getPath() + " to upload. Hehe");
+                    showToast("Selected " + mFileUri.getPath() + " to upload. Hoho");
 
                     // File's meta data.
                     File body = new File();

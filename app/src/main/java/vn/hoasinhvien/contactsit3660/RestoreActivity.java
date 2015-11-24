@@ -119,7 +119,7 @@ public class RestoreActivity extends Activity {
                     }
                     else {
                         if (rgCloud.getCheckedRadioButtonId() == R.id.rbGoogleDrive) {
-                            intent.putExtra(Information.TYPE, Information.DOWNLOAD);
+                            intent.putExtra(Information.TYPE, Information.UPLOAD);
                         }
                     }
                 }
