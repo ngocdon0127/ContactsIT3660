@@ -22,11 +22,13 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Document;
@@ -57,7 +59,7 @@ public class MainActivity extends TabActivity {
     ListView lvContact;
     ArrayList<Contact> contacts = new ArrayList<>();
     //    ArrayContact contacts = new ArrayContact();
-    ArrayAdapter<Contact> adapter = null;
+    ContactAdapter adapter = null;
     Button btnDB, btnObject, btnXML;
 
 
@@ -84,6 +86,7 @@ public class MainActivity extends TabActivity {
     protected void onResume() {
         super.onResume();
         registerReceiver(receiver, new IntentFilter(Information.BROADCAST_DONE_READ_DATA));
+        registerReceiver(receiver, new IntentFilter(Information.BROADCAST_DONE_WRITE_FILE_TO_BACKUP));
     }
 
     @Override
@@ -94,6 +97,7 @@ public class MainActivity extends TabActivity {
 
     public void btnUpload(View v){
         Intent intent = new Intent(MainActivity.this,GoogleActivity.class);
+        intent.putExtra(Information.TYPE, Information.UPLOAD);
         startActivity(intent);
     }
 
@@ -111,9 +115,6 @@ public class MainActivity extends TabActivity {
 
     public void btnBackup(View v){
         writeContactsToXML();
-        Intent intent = new Intent(MainActivity.this, RestoreActivity.class);
-        intent.putExtra(Information.TYPE, Information.UPLOAD);
-        startActivity(intent);
     }
 
     public void btnRestore(View v){
@@ -250,42 +251,52 @@ public class MainActivity extends TabActivity {
     }
 
     private void writeContactsToXML(){
-        contacts.clear();
-        readContactsFromDB();
-        File file = new File(Environment.getExternalStorageDirectory(), "contacts.xml");
-        System.out.println(Environment.getExternalStorageDirectory());
-        System.out.println(Environment.getExternalStorageDirectory().getAbsolutePath());
-        if (file.exists()){
-            file.delete();
-            System.out.println("Xóa file cũ.");
-        }
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(file);
-            PrintWriter pw = new PrintWriter(fos);
+        SharedData.addProgressDialog("Writing Contacts to File...", MainActivity.this);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                contacts.clear();
+                readContactsFromDB();
+                File file = new File(Environment.getExternalStorageDirectory(), "contacts.xml");
+                System.out.println(Environment.getExternalStorageDirectory());
+                System.out.println(Environment.getExternalStorageDirectory().getAbsolutePath());
+                if (file.exists()){
+                    file.delete();
+                    System.out.println("Xóa file cũ.");
+                }
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(file);
+                    PrintWriter pw = new PrintWriter(fos);
 //            pw.write("<count>" + contacts.size() + "</count>\n\n");
-            pw.write("<contacts>\n\n");
-            for (int i = 0; i < contacts.size(); i++) {
-                Contact c = contacts.get(i);
-                pw.write("\t<contact>\n");
-                pw.write("\t\t<id>" + c.getId() + "</id>\n");
-                pw.write("\t\t<name>" + c.getName() + "</name>\n");
-                for(int j = 0; j < c.getNumber().size(); j++){
-                    pw.write("\t\t<phone>" + c.getNumber().get(j) + "</phone>\n");
+                    pw.write("<contacts>\n\n");
+                    for (int i = 0; i < contacts.size(); i++) {
+                        Contact c = contacts.get(i);
+                        pw.write("\t<contact>\n");
+                        pw.write("\t\t<id>" + c.getId() + "</id>\n");
+                        pw.write("\t\t<name>" + c.getName() + "</name>\n");
+                        for(int j = 0; j < c.getNumber().size(); j++){
+                            pw.write("\t\t<phone>" + c.getNumber().get(j) + "</phone>\n");
+                        }
+                        for(int j = 0; j < c.getEmail().size(); j++){
+                            pw.write("\t\t<email>" + c.getEmail().get(j) + "</email>\n");
+                        }
+                        pw.write("\t</contact>\n\n");
+                    }
+                    pw.write("</contacts>");
+                    pw.close();
+                    fos.close();
+//                    SharedData.progress = 1;
+                    showToast("File saved.");
+                    Intent intent = new Intent("vn.hoasinhvien.contactsit3660.mainActivity.backup");
+                    sendBroadcast(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showToast("Failed.");
                 }
-                for(int j = 0; j < c.getEmail().size(); j++){
-                    pw.write("\t\t<email>" + c.getEmail().get(j) + "</email>\n");
-                }
-                pw.write("\t</contact>\n\n");
             }
-            pw.write("</contacts>");
-            pw.close();
-            fos.close();
-            showToast("File saved.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            showToast("Failed.");
-        }
+        }).start();
     }
 
     private void showToast(String s){
@@ -336,7 +347,7 @@ public class MainActivity extends TabActivity {
 //                        }
 //                    }
 //                }
-                adapter = new ArrayAdapter<Contact>(getApplicationContext(), android.R.layout.simple_list_item_1, contacts);
+                adapter = new ContactAdapter();
                 lvContact.setAdapter(adapter);
                 lvContact.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -350,6 +361,11 @@ public class MainActivity extends TabActivity {
                     }
                 });
                 getTabHost().setCurrentTab(1);
+            }
+            else if (intent.getAction().equals(Information.BROADCAST_DONE_WRITE_FILE_TO_BACKUP)){
+                Intent intent1 = new Intent(MainActivity.this, RestoreActivity.class);
+                intent1.putExtra(Information.TYPE, Information.UPLOAD);
+                startActivity(intent1);
             }
         }
     };
@@ -376,6 +392,43 @@ public class MainActivity extends TabActivity {
 //        return super.onOptionsItemSelected(item);
 //    }
 
+    class ContactAdapter extends ArrayAdapter<Contact>{
 
+        ContactAdapter(){
+            super(MainActivity.this, android.R.layout.simple_list_item_1, contacts);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View row = convertView;
+            ContactHolder holder = null;
+
+            if (row == null){
+                LayoutInflater inflater = getLayoutInflater();
+                row = inflater.inflate(R.layout.row, parent, false);
+                holder = new ContactHolder(row);
+                row.setTag(holder);
+            }
+            else{
+                holder = (ContactHolder) row.getTag();
+            }
+
+            holder.populateFrom(contacts.get(position));
+            return row;
+        }
+    }
+
+    static class ContactHolder{
+        private TextView tvName = null;
+
+        ContactHolder(View row){
+            tvName = (TextView) row.findViewById(R.id.tvRowName);
+        }
+
+        void populateFrom(Contact c){
+            tvName.setText(c.getName());
+        }
+
+    }
 
 }

@@ -215,6 +215,7 @@ public class GoogleActivity extends Activity{
                     }
                 }
                 if (type == Information.UPLOAD){
+                    SharedData.addProgressDialog("Uploading to Google Drive...", GoogleActivity.this);
                     saveFileToDrive();
                 }
                 else if (type == Information.DOWNLOAD){
@@ -272,6 +273,9 @@ public class GoogleActivity extends Activity{
 
                     if (file != null){
                         showToast("Uploaded: " + file.getTitle());
+                        setResult(Activity.RESULT_OK);
+                        SharedData.progress = 1;
+                        finish();
                     }
                 } catch (UserRecoverableAuthIOException e) {
                     startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
