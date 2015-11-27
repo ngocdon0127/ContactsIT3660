@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#fff"
+    >
 
     <Button
         android:id="@+id/btnBack"
@@ -9,9 +12,11 @@
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/left_arrow"
         android:background="#fff"
-        android:text="don"
-        android:textSize="30dp"
-        android:textColor="#ccc"
+        android:text="nguyen ngoc don"
+        android:textColor="#000"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:inputType="textCapWords"
         />
 
     <TextView
@@ -19,7 +24,7 @@
         android:layout_height="155sp"
         android:text="D"
         android:id="@+id/textView"
-        android:background="#536173"
+        android:background="#00aba6"
         style="@style/button_text"
         android:textSize="100dp"
         />

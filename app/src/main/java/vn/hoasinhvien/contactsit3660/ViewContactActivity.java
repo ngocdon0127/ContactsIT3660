@@ -1,7 +1,9 @@
 package vn.hoasinhvien.contactsit3660;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
@@ -62,7 +64,11 @@ public class ViewContactActivity extends Activity {
 //        Contact contact =  new Contact(id, name, number, email);
         if (contact != null) {
 //            tvContact.setText(contact.getFullDetails());
-            textView.setText(contact.getName().substring(0, 1));
+            Character ch = contact.getName().substring(0, 1).toUpperCase().charAt(0);
+            if (Character.isAlphabetic(ch))
+                textView.setText(ch.toString());
+            else
+                textView.setText("#");
 //            textView.setText(contact.getName());
             String number = "";
             for (int i = 0; i < contact.getNumber().size(); i++) {

@@ -1,5 +1,6 @@
 package vn.hoasinhvien.contactsit3660;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.BroadcastReceiver;
@@ -11,6 +12,7 @@ import android.content.IntentFilter;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -332,21 +334,21 @@ public class MainActivity extends TabActivity {
         public void onReceive(final Context context, Intent intent) {
             if (intent.getAction().equals(Information.BROADCAST_DONE_READ_DATA)) {
                 SharedData.progress = 1;
-//                for (int i = contacts.size() - 1; i > 0 ; i--) {
-//                    for (int j = 0; j < i; j++) {
-//                        Contact c1 = contacts.get(j);
-//                        Contact c2 = contacts.get(j + 1);
-//                        try {
-//                            if (c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()) > 0){
-//                                contacts.set(j, c2);
-//                                contacts.set(j + 1, c1);
-//                            }
-//                        }
-//                        catch (Exception e){
-//
-//                        }
-//                    }
-//                }
+                for (int i = contacts.size() - 1; i > 0 ; i--) {
+                    for (int j = 0; j < i; j++) {
+                        Contact c1 = contacts.get(j);
+                        Contact c2 = contacts.get(j + 1);
+                        try {
+                            if (c1.getName().toLowerCase().compareTo(c2.getName().toLowerCase()) > 0){
+                                contacts.set(j, c2);
+                                contacts.set(j + 1, c1);
+                            }
+                        }
+                        catch (Exception e){
+
+                        }
+                    }
+                }
                 adapter = new ContactAdapter();
                 lvContact.setAdapter(adapter);
                 lvContact.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -420,13 +422,20 @@ public class MainActivity extends TabActivity {
 
     static class ContactHolder{
         private TextView tvName = null;
+        private TextView tvFirstLetter = null;
 
         ContactHolder(View row){
             tvName = (TextView) row.findViewById(R.id.tvRowName);
+            tvFirstLetter = (TextView) row.findViewById(R.id.tvFirstLetter);
         }
 
         void populateFrom(Contact c){
             tvName.setText(c.getName());
+            Character ch = c.getName().substring(0, 1).toUpperCase().charAt(0);
+            if (Character.isAlphabetic(ch))
+                tvFirstLetter.setText(ch.toString());
+            else
+                tvFirstLetter.setText("#");
         }
 
     }
