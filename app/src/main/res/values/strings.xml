@@ -14,7 +14,7 @@
     <string name="btnDownloadFromGoogleDrive">Google Drive</string>
     <string name="btnRestore">Restore</string>
     <string name="btnDownloadFromDropbox">Dropbox</string>
-    <string name="btnDeleteAllContacts">Delete All Contacts (nhớ backup trước khi ấn)</string>
+    <string name="btnDeleteAllContacts">Delete All Contacts</string>
     <string name="rbDropbox">Dropbox</string>
     <string name="rbGoogleDrive">Google Drive</string>
     <string name="title_activity_display_contacts">DisplayContacts</string>

@@ -176,7 +176,7 @@ public class RestoreActivity extends Activity {
                         }).start();
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "Download hất bại.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Download thất bại.", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case Information.UPLOAD:

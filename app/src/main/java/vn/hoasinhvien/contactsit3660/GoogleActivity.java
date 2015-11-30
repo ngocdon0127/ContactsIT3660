@@ -1,5 +1,7 @@
 package vn.hoasinhvien.contactsit3660;
 
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
@@ -71,14 +73,16 @@ public class GoogleActivity extends Activity{
         setContentView(R.layout.activity_google);
         mListView = (ListView) findViewById(R.id.lvDownload);
 
-        OnItemClickListener mMessageClickedHandler = new OnItemClickListener(){
-            public void onItemClick(AdapterView parent, View v, int position, long id)
-            {
-                downloadItemFromList(position);
-            }
-        };
+//        OnItemClickListener mMessageClickedHandler = new OnItemClickListener(){
+//            public void onItemClick(AdapterView parent, View v, int position, long id)
+//            {
+//                downloadItemFromList(position);
+//            }
+//        };
 
-        mListView.setOnItemClickListener(mMessageClickedHandler);
+//        download();
+
+//        mListView.setOnItemClickListener(mMessageClickedHandler);
 
 //        final Button button = (Button) findViewById(R.id.btnUploadToGoogleDrive);
 //        button.setOnClickListener(new View.OnClickListener(){
@@ -118,6 +122,8 @@ public class GoogleActivity extends Activity{
                 mResultList.addAll(fileList.getItems());
                 request.setPageToken(fileList.getNextPageToken());
                 populateListView();
+                Intent intent = new Intent(Information.BROADCAST_GOOGLE_GET_DRIVE_CONTENT);
+                sendBroadcast(intent);
             }
         });
         t.start();
@@ -159,6 +165,46 @@ public class GoogleActivity extends Activity{
         t.start();
     }
 
+    private void download(){
+        System.out.println("start download");
+        Thread t = new Thread(new Runnable(){
+            @Override
+            public void run(){
+                int exist = 0;
+                for(File tmp : mResultList){
+                    if (tmp.getTitle().equalsIgnoreCase("Contacts.xml")){
+                        exist = 1;
+                        if (tmp.getDownloadUrl() != null && tmp.getDownloadUrl().length() >0){
+                            try{
+                                com.google.api.client.http.HttpResponse resp = mService.getRequestFactory()
+                                        .buildGetRequest(new GenericUrl(tmp.getDownloadUrl()))
+                                        .execute();
+                                InputStream iStream = resp.getContent();
+                                try{
+//                                    final java.io.File file = new java.io.File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath(),
+                                    final java.io.File file = new java.io.File(Environment.getExternalStorageDirectory(),
+                                            tmp.getTitle());
+//                                    showToast("Downloading: " + tmp.getTitle() + " to " + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath());
+                                    showToast("Downloading: " + tmp.getTitle() + " to " + Environment.getExternalStorageDirectory());
+                                    storeFile(file, iStream);
+                                } finally {
+                                    iStream.close();
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+                if (exist == 0){
+                    setResult(Activity.RESULT_CANCELED);
+                    finish();
+                }
+            }
+        });
+        t.start();
+    }
+
     private void populateListView(){
         runOnUiThread(new Runnable(){
             @Override
@@ -169,8 +215,8 @@ public class GoogleActivity extends Activity{
                     mFileArray[i] = tmp.getTitle();
                     i++;
                 }
-                mAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, mFileArray);
-                mListView.setAdapter(mAdapter);
+//                mAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, mFileArray);
+//                mListView.setAdapter(mAdapter);
             }
         });
     }
@@ -220,6 +266,7 @@ public class GoogleActivity extends Activity{
                 }
                 else if (type == Information.DOWNLOAD){
                     getDriveContents();
+//                    download();
                 }
                 break;
             case REQUEST_AUTHORIZATION:
@@ -296,4 +343,25 @@ public class GoogleActivity extends Activity{
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(receiver, new IntentFilter(Information.BROADCAST_GOOGLE_GET_DRIVE_CONTENT));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Information.BROADCAST_GOOGLE_GET_DRIVE_CONTENT)){
+                download();
+            }
+        }
+    };
 }

@@ -121,6 +121,24 @@ public class DropboxActivity extends Activity {
                     file.delete();
                     System.out.println("Xóa file cũ.");
                 }
+                DropboxAPI.Entry entry = null;
+                try {
+                    entry = mDBApi.metadata("/" + "contacts.xml", 1, null, true, null);
+
+                    if ((entry.isDir) || (entry.isDeleted)){
+                        System.out.println("file not found");
+                        result = Activity.RESULT_CANCELED;
+                        setResult(result);
+                        sendBroadcast();
+                        return;
+                    }
+                } catch (DropboxException e) {
+                    e.printStackTrace();
+                    result = Activity.RESULT_CANCELED;
+                    setResult(result);
+                    sendBroadcast();
+                    return;
+                }
                 try {
                     FileOutputStream fos = new FileOutputStream(file);
 //            DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/" + downloadFileName, null, fos, null);
