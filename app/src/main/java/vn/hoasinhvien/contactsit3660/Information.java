@@ -22,6 +22,7 @@ public class Information {
     public static final String BROADCAST_DONE_READ_DATA = "vn.hoasinhvien.contactsit3660.broadcast.done.read.data";
     public static final String BROADCAST_DONE_WRITE_FILE_TO_BACKUP = "vn.hoasinhvien.contactsit3660.mainActivity.backup";
     public static final String BROADCAST_GOOGLE_GET_DRIVE_CONTENT = "vn.hoasinhvien.contactsit3660.google.get.drive.content";
+    public static final String BROADCAST_DROPBOX_READ_USER_NAME = "vn.hoasinhvien.contactsit3660.dropbox.read.user.name";
     public static final String TYPE = "type";
     public static final int DOWNLOAD = 0;
     public static final int UPLOAD = 1;

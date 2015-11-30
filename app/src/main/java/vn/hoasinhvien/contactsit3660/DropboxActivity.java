@@ -77,22 +77,34 @@ public class DropboxActivity extends Activity {
 
         super.onResume();
 
+        System.out.println("onresume");
         registerReceiver(receiver, new IntentFilter(Information.KEY_BROADCAST_UPLOAD_DROPBOX));
+        registerReceiver(receiver, new IntentFilter(Information.BROADCAST_DROPBOX_READ_USER_NAME));
+        System.out.println("register receiver ok");
 
         session = mDBApi.getSession();
+        System.out.println("get session ok");
 
         if (session.authenticationSuccessful()) {
             System.out.println("auth ok");
             try {
                 uid = session.finishAuthentication();
                 accessToken = session.getOAuth2AccessToken();
+                System.out.println("start calling thread");
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        System.out.println("thread started");
+                        Looper.prepare();
                         try {
                             user = mDBApi.accountInfo().displayName;
                             storeKeys(accessToken, uid, user);
+                            System.out.println(user);
+                            Intent intent = new Intent(Information.BROADCAST_DROPBOX_READ_USER_NAME);
+                            sendBroadcast(intent);
+                            System.out.println("intent is sent");
                         } catch (DropboxException e) {
+                            System.out.println("error");
                             e.printStackTrace();
                         }
                     }
@@ -103,6 +115,11 @@ public class DropboxActivity extends Activity {
             }
         }
 
+        addDialog();    // Can't figure out why this line work but it's 1 a.m
+//        int x = 1;
+    }
+
+    public void addDialog(){
         if (session.isLinked()){
             System.out.println("linked");
 //            btnLogIn.setText("Log Out");
@@ -250,7 +267,7 @@ public class DropboxActivity extends Activity {
     private void storeKeys(String token, String uid, String usr) {
         SharedPreferences prefs = getSharedPreferences(
                 Information.ACCOUNT_PREFS_NAME, 0);
-        final SharedPreferences.Editor edit = prefs.edit();
+        SharedPreferences.Editor edit = prefs.edit();
         edit.putString(Information.ACCESS_TOKEN_NAME, token);
         edit.putString(Information.ACCESS_UID, uid);
         edit.putString(Information.ACCESS_USER_NAME, user);
@@ -357,8 +374,13 @@ public class DropboxActivity extends Activity {
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            progress = 1;
-            finishUpload();
+            if (intent.getAction().equals(Information.KEY_BROADCAST_UPLOAD_DROPBOX)){
+                progress = 1;
+                finishUpload();
+            }
+            else if (intent.getAction().equals(Information.BROADCAST_DROPBOX_READ_USER_NAME)){
+                addDialog();
+            }
         }
     };
 
