@@ -120,7 +120,7 @@ public class MainActivity extends TabActivity {
     }
 
     public void btnRestore(View v){
-        Intent intent = new Intent(MainActivity.this, RestoreActivity.class);
+        Intent intent = new Intent(MainActivity.this, ServerCommunicateActivity.class);
         intent.putExtra(Information.TYPE, Information.DOWNLOAD);
         startActivity(intent);
     }
@@ -365,7 +365,7 @@ public class MainActivity extends TabActivity {
                 getTabHost().setCurrentTab(1);
             }
             else if (intent.getAction().equals(Information.BROADCAST_DONE_WRITE_FILE_TO_BACKUP)){
-                Intent intent1 = new Intent(MainActivity.this, RestoreActivity.class);
+                Intent intent1 = new Intent(MainActivity.this, ServerCommunicateActivity.class);
                 intent1.putExtra(Information.TYPE, Information.UPLOAD);
                 startActivity(intent1);
             }

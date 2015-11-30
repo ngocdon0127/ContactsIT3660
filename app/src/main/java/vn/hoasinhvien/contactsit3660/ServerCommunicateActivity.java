@@ -39,11 +39,11 @@ import javax.xml.parsers.ParserConfigurationException;
 /**
  * Created by NgocDon on 11/12/2015.
  */
-public class RestoreActivity extends Activity {
+public class ServerCommunicateActivity extends Activity {
 
 //    Button btnDownloadFromDropbox;
 //    Button btnDownloadFromGoogleDrive;
-    Button btnRestore;
+    Button btnGo;
     Button btnDeleteAllContacts;
     RadioGroup rgCloud;
     int type;
@@ -53,7 +53,7 @@ public class RestoreActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.restore_layout);
+        setContentView(R.layout.server_communicate_layout);
 
         System.out.println("restore created.");
         type = -1;
@@ -62,11 +62,11 @@ public class RestoreActivity extends Activity {
 //        btnDownloadFromGoogleDrive = (Button) findViewById(R.id.btnDownloadFromGoogleDrive);
         rgCloud = (RadioGroup) findViewById(R.id.rgCloud);
         rgCloud.check(R.id.rbDropbox);
-        btnRestore = (Button) findViewById(R.id.btnRestore);
+        btnGo = (Button) findViewById(R.id.btnGo);
         btnDeleteAllContacts = (Button) findViewById(R.id.btnDeleteAllContacts);
         type = getIntent().getExtras().getInt(Information.TYPE);
         if (type == Information.UPLOAD){
-            btnRestore.setText("Upload");
+            btnGo.setText("Upload");
             btnDeleteAllContacts.setEnabled(false);
             btnDeleteAllContacts.setVisibility(View.GONE);
         }
@@ -89,15 +89,15 @@ public class RestoreActivity extends Activity {
 //            }
 //        });
 
-        btnRestore.setOnClickListener(new View.OnClickListener() {
+        btnGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent;
                 if (rgCloud.getCheckedRadioButtonId() == R.id.rbGoogleDrive){
-                    intent = new Intent(RestoreActivity.this, GoogleActivity.class);
+                    intent = new Intent(ServerCommunicateActivity.this, GoogleActivity.class);
                 }
                 else {
-                    intent = new Intent(RestoreActivity.this, DropboxActivity.class);
+                    intent = new Intent(ServerCommunicateActivity.this, DropboxActivity.class);
                 }
                 intent.putExtra(Information.DROPBOX_LOCAL_UPLOAD_FILE_NAME, "contacts.xml");
                 intent.putExtra(Information.DROPBOX_SERVER_DOWNLOAD_FILE_NAME, "contacts.xml");
@@ -118,7 +118,7 @@ public class RestoreActivity extends Activity {
         btnDeleteAllContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedData.addProgressDialog("Deleting Contacts...", RestoreActivity.this);
+                SharedData.addProgressDialog("Deleting Contacts...", ServerCommunicateActivity.this);
                 final Context context = getApplicationContext();
                 new Thread(new Runnable() {
                     @Override
@@ -164,7 +164,7 @@ public class RestoreActivity extends Activity {
             switch (type){
                 case Information.DOWNLOAD:
                     if (resultCode == Activity.RESULT_OK){
-                        SharedData.addProgressDialog("Restoring Contacts...", RestoreActivity.this);
+                        SharedData.addProgressDialog("Restoring Contacts...", ServerCommunicateActivity.this);
                         final Context context = getApplicationContext();
                         new Thread(new Runnable() {
                             @Override

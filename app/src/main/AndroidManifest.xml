@@ -48,8 +48,8 @@
         </activity>
 		
         <activity
-            android:name=".RestoreActivity"
-            android:label="Restore" >
+            android:name=".ServerCommunicateActivity"
+            android:label="ServerCommunicate" >
         </activity>
 		
         <activity

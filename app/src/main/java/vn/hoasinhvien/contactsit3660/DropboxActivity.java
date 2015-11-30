@@ -1,21 +1,25 @@
 package vn.hoasinhvien.contactsit3660;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.session.AppKeyPair;
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,8 +38,9 @@ public class DropboxActivity extends Activity {
     String uploadFileName;
     String downloadFileName;
     int type;
-    private String accessToken;
+    private String accessToken = "";
     private String uid = "";
+    private String user = "";
     private int result = Activity.RESULT_CANCELED;
     public int progress = 0;
     ProgressDialog progressDialog;
@@ -80,9 +85,18 @@ public class DropboxActivity extends Activity {
             System.out.println("auth ok");
             try {
                 uid = session.finishAuthentication();
-
                 accessToken = session.getOAuth2AccessToken();
-                storeKeys(accessToken, uid);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            user = mDBApi.accountInfo().displayName;
+                            storeKeys(accessToken, uid, user);
+                        } catch (DropboxException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
             } catch (IllegalStateException e) {
                 System.out.println("Couldn't authenticate with Dropbox:"
                         + e.getLocalizedMessage());
@@ -90,18 +104,44 @@ public class DropboxActivity extends Activity {
         }
 
         if (session.isLinked()){
+            System.out.println("linked");
 //            btnLogIn.setText("Log Out");
-            switch (type){
-                case Information.UPLOAD:
-                    upload();
-                    break;
-                case Information.DOWNLOAD:
-                    download();
-                    break;
-            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setIcon(R.mipmap.ic_launcher);
+            builder.setTitle("");
+//            Looper.prepare();
+            builder.setMessage("Current account: " + user);
+            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    switch (type) {
+                        case Information.UPLOAD:
+                            upload();
+                            break;
+                        case Information.DOWNLOAD:
+                            download();
+                            break;
+                    }
+                }
+            });
+            builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mDBApi.getSession().unlink();
+                    clearKeys();
+                    dialog.dismiss();
+                    logIn();
+                }
+            });
+            System.out.println("Create dialog");
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            System.out.println("show");
         }
         else {
 //            btnLogIn.setText("Log In");
+            System.out.println("login");
             logIn();
         }
     }
@@ -160,6 +200,13 @@ public class DropboxActivity extends Activity {
         }).start();
     }
 
+    private void clearKeys() {
+        SharedPreferences prefs = getSharedPreferences(Information.ACCOUNT_PREFS_NAME, 0);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.clear();
+        edit.commit();
+    }
+
     public void showToast(final String s){
         runOnUiThread(new Runnable() {
             @Override
@@ -192,6 +239,7 @@ public class DropboxActivity extends Activity {
         String[] s = new String[2];
         s[0] = sharedPreferences.getString(Information.ACCESS_TOKEN_NAME, "");
         s[1] = sharedPreferences.getString(Information.ACCESS_UID, "");
+        user = sharedPreferences.getString(Information.ACCESS_USER_NAME, "");
         System.out.println("preference: " + s[0] + ".");
         System.out.println("preference: " + sharedPreferences.getString("dondon", "") + ".");
         if (s[0].equals(""))
@@ -199,13 +247,29 @@ public class DropboxActivity extends Activity {
         return s;
     }
 
-    private void storeKeys(String token, String uid) {
+    private void storeKeys(String token, String uid, String usr) {
         SharedPreferences prefs = getSharedPreferences(
                 Information.ACCOUNT_PREFS_NAME, 0);
-        SharedPreferences.Editor edit = prefs.edit();
+        final SharedPreferences.Editor edit = prefs.edit();
         edit.putString(Information.ACCESS_TOKEN_NAME, token);
         edit.putString(Information.ACCESS_UID, uid);
-        edit.commit();
+        edit.putString(Information.ACCESS_USER_NAME, user);
+        edit.apply();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                String user = "";
+//                try{
+//                    user = mDBApi.accountInfo().displayName;
+//                }
+//                catch (Exception e){
+//
+//                }
+//                edit.putString(Information.ACCESS_USER_NAME, user);
+//                edit.apply();
+//            }
+//        }).start();
+
     }
 
     public void sendBroadcast(){
