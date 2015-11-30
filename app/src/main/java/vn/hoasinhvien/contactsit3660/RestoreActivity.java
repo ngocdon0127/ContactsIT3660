@@ -103,24 +103,12 @@ public class RestoreActivity extends Activity {
                 intent.putExtra(Information.DROPBOX_SERVER_DOWNLOAD_FILE_NAME, "contacts.xml");
                 intent.putExtra(Information.DROPBOX_SERVER_UPLOAD_FILE_NAME, "contacts.xml");
                 System.out.println("onClick Restore, type = " + type);
-                if (type == Information.DOWNLOAD){
-                    if (rgCloud.getCheckedRadioButtonId() == R.id.rbDropbox) {
-                        intent.putExtra(Information.TYPE, Information.DOWNLOAD);
-                    }
-                    else {
-                        if (rgCloud.getCheckedRadioButtonId() == R.id.rbGoogleDrive) {
-                            intent.putExtra(Information.TYPE, Information.DOWNLOAD);
-                        }
-                    }
+                if (rgCloud.getCheckedRadioButtonId() == R.id.rbDropbox) {
+                    intent.putExtra(Information.TYPE, type);
                 }
-                else if (type == Information.UPLOAD){
-                    if (rgCloud.getCheckedRadioButtonId() == R.id.rbDropbox) {
-                        intent.putExtra(Information.TYPE, Information.UPLOAD);
-                    }
-                    else {
-                        if (rgCloud.getCheckedRadioButtonId() == R.id.rbGoogleDrive) {
-                            intent.putExtra(Information.TYPE, Information.UPLOAD);
-                        }
+                else {
+                    if (rgCloud.getCheckedRadioButtonId() == R.id.rbGoogleDrive) {
+                        intent.putExtra(Information.TYPE, type);
                     }
                 }
                 startActivityForResult(intent, 1);

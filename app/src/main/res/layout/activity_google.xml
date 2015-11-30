@@ -26,7 +26,7 @@
         <!--android:layout_alignStart="@+id/btnUploadToGoogleDrive" />-->
 
     <ListView
-        android:background="#0f0"
+        android:background="#00aba6"
         android:id="@+id/lvDownload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
