@@ -42,30 +42,11 @@ public class ViewContactActivity extends Activity {
         findViewById(R.id.txtPhone).setEnabled(false);
         findViewById(R.id.txtEmail).setEnabled(false);
         Contact contact = (Contact) getIntent().getExtras().get("contact");
-//        String selection = ContactsContract.Data.CONTACT_ID + " = ? ";
-//        String[] contact_id = new String[]{id};
-////            System.out.println("----\n");
-//        Cursor c1 = getContentResolver().query(ContactsContract.Data.CONTENT_URI, null, selection, contact_id, null);
-//        ArrayList<String > number = new ArrayList<>();
-//        ArrayList<String> email = new ArrayList<>();
-//        while (c1.moveToNext()){
-//            String type = c1.getString(c1.getColumnIndex(ContactsContract.Data.MIMETYPE));
-////            String bufId = c1.getString(c1.getColumnIndex(ContactsContract.Data._ID));
-//            String bufData = c1.getString(c1.getColumnIndex(ContactsContract.Data.DATA1));
-//            if (type.equals(ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)){
-//                email.add(bufData);
-//                System.out.println(bufData);
-//            }
-//            else if (type.equals(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)){
-//                number.add(SharedData.stdNumber(bufData));
-//                System.out.println(bufData);
-//            }
-//        }
-//        Contact contact =  new Contact(id, name, number, email);
+
         if (contact != null) {
 //            tvContact.setText(contact.getFullDetails());
             Character ch = contact.getName().substring(0, 1).toUpperCase().charAt(0);
-            if (Character.isAlphabetic(ch))
+            if (checkAlphabetic(ch))
                 textView.setText(ch.toString());
             else
                 textView.setText("#");
@@ -83,5 +64,18 @@ public class ViewContactActivity extends Activity {
             btnBack.setText("  " + contact.getName());
         }
 
+    }
+
+    boolean checkAlphabetic(Character ch){
+        char set[] = new char[]{'Ă', 'Â', 'Đ', 'Ê', 'Ô', 'Ơ', 'Ư'};
+        if ((ch >= 'A') && (ch <= 'Z')){
+            return true;
+        }
+        for (int i = 0; i < set.length; i++) {
+            if (ch == set[i]){
+                return true;
+            }
+        }
+        return false;
     }
 }

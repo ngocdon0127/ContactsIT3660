@@ -52,27 +52,15 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class MainActivity extends TabActivity {
 
-//    Button btnContacts;
-//    Button btnBackup;
-//    Button btnUpload;
-//    Button btnRestore;
-//    Button btnExit;
 
     ListView lvContact;
     ArrayList<Contact> contacts = new ArrayList<>();
-    //    ArrayContact contacts = new ArrayContact();
     ContactAdapter adapter = null;
-    Button btnDB, btnObject, btnXML;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.home_layout);
-
-//        btnBackup = (Button) findViewById(R.id.btnBackup);
-//        btnContacts = (Button) findViewById(R.id.btnContacts);
-//        btnExit = (Button) findViewById(R.id.)
         setTitle("Tab Main");
         TabHost tabHost = getTabHost();
         LayoutInflater inflater = getLayoutInflater();
@@ -146,53 +134,7 @@ public class MainActivity extends TabActivity {
             id = c.getString(c.getColumnIndex(ContactsContract.Contacts._ID));
             lookup_key = c.getString(c.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
             name =  c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-//            Cursor c1;
-//            c1 = getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = " + id, null, null);
-//            email = null;
-//            if (c1.getCount() > 0){
-//                email = new ArrayList<>();
-//                for (int i = 0; i < c1.getCount(); i++) {
-//                    c1.moveToNext();
-//                    String buf = c1.getString(c1.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
-//                    String bufId = c1.getString(c1.getColumnIndex(ContactsContract.CommonDataKinds.Email._ID));
-//                    if (!email.contains(buf))
-//                        email.add(buf);
-//                    else {
-//                        int affected = getContentResolver().delete(ContactsContract.CommonDataKinds.Email.CONTENT_URI, ContactsContract.CommonDataKinds.Email._ID + " = ?", new String[]{bufId});
-//                        System.out.println("delete " + affected + " " + buf + " of " + name);
-//                        countdel++;
-//                    }
-//                }
-//            }
-//            c1.close();
-//            number = null;
-//            c1 = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] {id}, null);
-//            if (c1.getCount() > 0){
-//                number = new ArrayList<>();
-//                for(int i = 0; i < c1.getCount(); i++){
-//                    c1.moveToNext();
-//                    number.add(c1.getString(c1.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
-//                }
-//            }
 //
-//            c1.close();
-            // start
-//            Cursor cc = getContentResolver().query(ContactsContract.RawContacts.CONTENT_URI, null, ContactsContract.RawContacts.CONTACT_ID + " = ?", new String[]{id}, null);
-//            String[] contact_id = new String[cc.getCount()];
-//            int ii = 0;
-////            System.out.print("---\n");
-//            while (cc.moveToNext()){
-//                String s = cc.getString(cc.getColumnIndex(ContactsContract.RawContacts._ID));
-//                contact_id[ii] = s;
-//                ii++;
-////                System.out.println(s);
-//            }
-//            cc.close();
-//            String selection = ContactsContract.Data.RAW_CONTACT_ID + " = ? ";
-//            for (int i = 1; i < contact_id.length; i++) {
-//                selection += "OR " + ContactsContract.Data.RAW_CONTACT_ID + " = ? ";
-//            }
-
             // finish
             String selection = ContactsContract.Data.CONTACT_ID + " = ? ";
             String[] contact_id = new String[]{id};
@@ -372,27 +314,7 @@ public class MainActivity extends TabActivity {
         }
     };
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
 //
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     class ContactAdapter extends ArrayAdapter<Contact>{
 

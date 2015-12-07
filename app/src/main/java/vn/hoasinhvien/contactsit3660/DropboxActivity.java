@@ -272,20 +272,6 @@ public class DropboxActivity extends Activity {
         edit.putString(Information.ACCESS_UID, uid);
         edit.putString(Information.ACCESS_USER_NAME, user);
         edit.apply();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                String user = "";
-//                try{
-//                    user = mDBApi.accountInfo().displayName;
-//                }
-//                catch (Exception e){
-//
-//                }
-//                edit.putString(Information.ACCESS_USER_NAME, user);
-//                edit.apply();
-//            }
-//        }).start();
 
     }
 
@@ -298,34 +284,7 @@ public class DropboxActivity extends Activity {
     public void upload(){
 
         SharedData.addProgressDialog("Uploading...", DropboxActivity.this);
-//        progress = 0;
-//        progressDialog = new ProgressDialog(DropboxActivity.this);
-//        progressDialog.setCancelable(false);
-//        progressDialog.setMax(1);
-//        progressDialog.setMessage("Uploading...");
-//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//        progressDialog.show();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while (true) {
-//                    try {
-//                        Thread.sleep(100);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    handler.post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            progressDialog.setProgress(progress);
-//                        }
-//                    });
-//                    if (progress == 1)
-//                        break;
-//                }
-//                progressDialog.dismiss();
-//            }
-//        }).start();
+//
 
         new Thread(new Runnable() {
             @Override

@@ -6,30 +6,6 @@
     >
 
 
-    <!--<Button-->
-        <!--android:background="@drawable/blue_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/btnDownloadFromDropbox"-->
-        <!--android:id="@+id/btnDownloadFromDropbox"-->
-        <!--style="@style/button_text"-->
-        <!--android:layout_marginTop="189dp"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:layout_alignParentStart="true"-->
-        <!--&lt;!&ndash;/>&ndash;&gt;-->
-
-    <!--<Button-->
-        <!--android:background="@drawable/blue_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/btnDownloadFromGoogleDrive"-->
-        <!--android:id="@+id/btnDownloadFromGoogleDrive"-->
-        <!--style="@style/button_text"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignParentEnd="true" />-->
-
     <RadioGroup
         android:id="@+id/rgCloud"
         android:layout_width="fill_parent"

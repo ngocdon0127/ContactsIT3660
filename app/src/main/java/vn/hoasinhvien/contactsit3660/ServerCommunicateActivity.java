@@ -58,8 +58,6 @@ public class ServerCommunicateActivity extends Activity {
         System.out.println("restore created.");
         type = -1;
 
-//        btnDownloadFromDropbox = (Button) findViewById(R.id.btnDownloadFromDropbox);
-//        btnDownloadFromGoogleDrive = (Button) findViewById(R.id.btnDownloadFromGoogleDrive);
         rgCloud = (RadioGroup) findViewById(R.id.rgCloud);
         rgCloud.check(R.id.rbDropbox);
         btnGo = (Button) findViewById(R.id.btnGo);
@@ -71,23 +69,6 @@ public class ServerCommunicateActivity extends Activity {
             btnDeleteAllContacts.setVisibility(View.GONE);
         }
 
-//        btnDownloadFromGoogleDrive.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
-
-//        btnDownloadFromDropbox.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(RestoreActivity.this, DropboxActivity.class);
-//                intent.putExtra(Information.DROPBOX_LOCAL_UPLOAD_FILE_NAME, "contacts.xml");
-//                intent.putExtra(Information.DROPBOX_SERVER_DOWNLOAD_FILE_NAME, "contacts.xml");
-//                intent.putExtra(Information.TYPE, Information.DOWNLOAD);
-//                startActivityForResult(intent, 1);
-//            }
-//        });
 
         btnGo.setOnClickListener(new View.OnClickListener() {
             @Override

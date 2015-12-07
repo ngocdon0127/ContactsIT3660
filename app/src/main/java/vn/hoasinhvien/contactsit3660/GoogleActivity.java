@@ -73,30 +73,6 @@ public class GoogleActivity extends Activity{
         setContentView(R.layout.activity_google);
         mListView = (ListView) findViewById(R.id.lvDownload);
 
-//        OnItemClickListener mMessageClickedHandler = new OnItemClickListener(){
-//            public void onItemClick(AdapterView parent, View v, int position, long id)
-//            {
-//                downloadItemFromList(position);
-//            }
-//        };
-
-//        download();
-
-//        mListView.setOnItemClickListener(mMessageClickedHandler);
-
-//        final Button button = (Button) findViewById(R.id.btnUploadToGoogleDrive);
-//        button.setOnClickListener(new View.OnClickListener(){
-//            public void onClick(View v){
-//                saveFileToDrive();
-//            }
-//        });
-
-//        final Button button2 = (Button) findViewById(R.id.btnDownload);
-//        button2.setOnClickListener(new View.OnClickListener(){
-//            public void onClick(View v){
-//                getDriveContents();
-//            }
-//        });
     }
 
     private void getDriveContents(){
@@ -124,42 +100,6 @@ public class GoogleActivity extends Activity{
                 populateListView();
                 Intent intent = new Intent(Information.BROADCAST_GOOGLE_GET_DRIVE_CONTENT);
                 sendBroadcast(intent);
-            }
-        });
-        t.start();
-    }
-
-    private void downloadItemFromList(int position){
-        mDLVal = (String) mListView.getItemAtPosition(position);
-        showToast("You just pressed: " + mDLVal);
-
-        Thread t = new Thread(new Runnable(){
-            @Override
-            public void run(){
-                for(File tmp : mResultList){
-                    if (tmp.getTitle().equalsIgnoreCase(mDLVal)){
-                        if (tmp.getDownloadUrl() != null && tmp.getDownloadUrl().length() >0){
-                            try{
-                                com.google.api.client.http.HttpResponse resp = mService.getRequestFactory()
-                                        .buildGetRequest(new GenericUrl(tmp.getDownloadUrl()))
-                                        .execute();
-                                InputStream iStream = resp.getContent();
-                                try{
-//                                    final java.io.File file = new java.io.File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath(),
-                                    final java.io.File file = new java.io.File(Environment.getExternalStorageDirectory(),
-                                            tmp.getTitle());
-//                                    showToast("Downloading: " + tmp.getTitle() + " to " + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath());
-                                    showToast("Downloading: " + tmp.getTitle() + " to " + Environment.getExternalStorageDirectory());
-                                    storeFile(file, iStream);
-                                } finally {
-                                    iStream.close();
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
             }
         });
         t.start();
@@ -307,7 +247,7 @@ public class GoogleActivity extends Activity{
                     java.io.File fileContent = new java.io.File(mFileUri.getPath());
                     FileContent mediaContent = new FileContent(cR.getType(mFileUri), fileContent);
 
-                    showToast("Selected " + mFileUri.getPath() + " to upload. Hoho");
+                    showToast("Selected " + mFileUri.getPath() + " to upload");
 
                     // File's meta data.
                     File body = new File();
