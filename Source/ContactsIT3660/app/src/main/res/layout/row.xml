@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:layout_marginLeft="0dp"
+    android:layout_marginRight="0dp"
+    >
+
+    <TextView
+        android:id="@+id/tvFirstLetter"
+        android:background="#00aba6"
+        android:text="D"
+        style="@style/button_text"
+        android:textSize="20dp"
+        android:layout_width="50dp"
+        android:layout_height="fill_parent"
+        />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/tvRowName"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="#000"
+        android:text="D"
+        android:textSize="15dp"
+        />
+
+</LinearLayout>

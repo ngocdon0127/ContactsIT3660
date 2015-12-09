@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="tv_danhba">#00CCCC</color>
+    <color name="tv_text_danhba">#ffd700</color>
+    <color name="display_background">#c4e1ac</color>
+</resources>
